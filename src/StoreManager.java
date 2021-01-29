@@ -22,16 +22,15 @@ public class StoreManager {
         return inv.getStock(product.getId());
     }
 
-    public boolean transaction(int[][] orders){
+    public double transaction(int[][] orders){
+        double total = 0;
         for (int i=0; i<orders.length;i++){
             if (inv.getStock(orders[i][0])<orders[i][1]){
                 //transaction failed
-                return false;
+                return -1;
             }
+            total +=inv.getProductPrice(orders[i][0])*orders[i][1];
         }
-        for (int i=0; i<orders.length;i++){
-            inv.removeStock(inv.findProduct(orders[i][0]),orders[i][1]);
-        }
-        return true;
+        return Math.round(total);
     }
 }
