@@ -1,5 +1,7 @@
 //Bardia Parmoun
 //101143006
+//Guy Morgenshtern
+//101151430
 
 /*
 - Create a new Inventory object upon object creation (i.e., when a StoreManager object is created).
