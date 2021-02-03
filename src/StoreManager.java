@@ -12,10 +12,14 @@ o Remember to subtract the quantities from the Inventory stock if the transactio
 import java.util.HashMap;
 
 public class StoreManager {
-    public Inventory inv;
+    private Inventory inv;
 
     public StoreManager() {
         inv = new Inventory();
+    }
+
+    public StoreManager(Inventory input_inv) {
+        inv = input_inv;
     }
 
     public Integer checkStock (Product product){
@@ -30,6 +34,11 @@ public class StoreManager {
                 return -1;
             }
             total +=inv.getProductPrice(orders[i][0])*orders[i][1];
+        }
+
+        for (int i=0; i<orders.length;i++){
+            total +=inv.getProductPrice(orders[i][0])*orders[i][1];
+            inv.removeStock(inv.findProduct(orders[i][0]),orders[i][1]);
         }
         return Math.round(total);
     }
