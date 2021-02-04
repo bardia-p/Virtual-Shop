@@ -14,7 +14,12 @@ public class Product{
         this.price = price;
     }
 
+    // getting the name of the product
     public String getName (){return name;}
+
+    // getting the id of the product
     public int getId (){return id;}
+
+    // getting the price of the product
     public double getPrice (){return price;}
 }
