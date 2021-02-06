@@ -5,7 +5,7 @@
 public class Product{
     private final String name;
     private final int id;
-    private double price;
+    private final double price;
 
     /**
      *
