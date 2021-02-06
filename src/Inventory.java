@@ -14,7 +14,11 @@ public class Inventory{
         this.stocks = new ArrayList<Integer>();
     }
 
-    // Finds the index of a product in the arraylist of products given the id of the product
+    /**
+     * Finds the index of a product in the arraylist of products given the id of the product
+     * @param id
+     * @return
+     */
     private int findProductIndex(int id){
         for (int i=0; i<products.size(); i++){
             if (products.get(i).getId()==id){
@@ -24,22 +28,38 @@ public class Inventory{
         return -1;
     }
 
-    // Finds the product given its id
+    /**
+     * Finds the product given its id
+     * @param id
+     * @return
+     */
     public Product findProduct(int id){
         return products.get(findProductIndex(id));
     }
 
-    // Gets the name of the product given its id
+    /**
+     * Gets the name of the product given its id
+     * @param id
+     * @return
+     */
     public String getProductName(int id){
         return findProduct(id).getName();
     }
 
-    // Gets the price of the product given its id
+    /**
+     * Gets the price of the product given its id
+     * @param id
+     * @return
+     */
     public double getProductPrice(int id){
         return findProduct(id).getPrice();
     }
 
-    // Find the number of stocks available for the product given its id
+    /**
+     * Find the number of stocks available for the product given its id
+     * @param id
+     * @return
+     */
     public Integer getStock (int id) {
         int index = findProductIndex(id);
         if (index>=0) {
@@ -49,7 +69,11 @@ public class Inventory{
         return -1;
     }
 
-    // Increases the number of products
+    /**
+     * Increases the number of products
+     * @param product
+     * @param newStock
+     */
     public void addStock (Product product, int newStock){
         int currentStock;
         int index = products.indexOf(product);
@@ -66,7 +90,12 @@ public class Inventory{
         }
     }
 
-    // Removes a certain number stocks from a product
+    /**
+     * Removes a certain number stocks from a product
+     * @param product
+     * @param newStock
+     * @return
+     */
     public boolean removeStock (Product product, int newStock){
         int currentStock;
         int index = products.indexOf(product);

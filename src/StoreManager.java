@@ -4,22 +4,35 @@
 public class StoreManager {
     private Inventory inv;
 
+    /**
+     *
+     */
     public StoreManager() {
         inv = new Inventory();
     }
 
-
-    // If there is an inventory already in place
+    /**
+     * If there is an inventory already in place
+     * @param input_inv
+     */
     public StoreManager(Inventory input_inv) {
         inv = input_inv;
     }
 
-    // Checks the number of stocks available of a given product given its object
+    /**
+     * Checks the number of stocks available of a given product given its object
+     * @param product
+     * @return
+     */
     public Integer checkStock (Product product){
         return inv.getStock(product.getId());
     }
 
-    // Takes a 2D array of orders in the form of [[product1, number1],...]] and applies the transaction
+    /**
+     * Takes a 2D array of orders in the form of [[product1, number1],...]] and applies the transaction
+     * @param orders
+     * @return
+     */
     public double transaction(int[][] orders){
         double total = 0;
 
