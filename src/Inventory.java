@@ -60,7 +60,7 @@ public class Inventory{
      * @param id
      * @return
      */
-    public Integer getStock (int id) {
+    public int getStock (int id) {
         int index = findProductIndex(id);
         if (index>=0) {
             return stocks.get(index);

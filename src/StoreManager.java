@@ -24,7 +24,7 @@ public class StoreManager {
      * @param product
      * @return
      */
-    public Integer checkStock (Product product){
+    public int checkStock (Product product){
         return inv.getStock(product.getId());
     }
 
@@ -33,7 +33,7 @@ public class StoreManager {
      * @param orders
      * @return
      */
-    public double transaction(int[][] orders){
+    public double makeTransaction(int[][] orders){
         double total = 0;
 
         // Checks to see if every part of the order is acceptable (i.e. there is enough of every product)

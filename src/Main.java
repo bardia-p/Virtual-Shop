@@ -23,19 +23,19 @@ public class Main {
         System.out.println("Number of this product available: " + store1.checkStock(p4));
 
         int[][] orders1 ={{p1.getId(),15},{p2.getId(),6},{p3.getId(),3}};
-        System.out.println("The cost of the transaction? $"+ store1.transaction(orders1));
+        System.out.println("The cost of the transaction? $"+ store1.makeTransaction(orders1));
 
         int[][] orders2 ={{p1.getId(),5},{p2.getId(),1},{p3.getId(),2}};
-        System.out.println("The cost of the transaction? $"+ store1.transaction(orders2));
+        System.out.println("The cost of the transaction? $"+ store1.makeTransaction(orders2));
 
         int[][] orders3 ={{p4.getId(),15}};
-        System.out.println("The cost of the transaction? $"+ store1.transaction(orders3));
+        System.out.println("The cost of the transaction? $"+ store1.makeTransaction(orders3));
 
         inv.addStock(p4,30);
         inv.addStock(p1,10);
 
         int[][] orders4 ={{p4.getId(),15},{p1.getId(),5}};
-        System.out.println("The cost of the transaction? $"+ store1.transaction(orders4));
+        System.out.println("The cost of the transaction? $"+ store1.makeTransaction(orders4));
 
         System.out.println("Number of this product available: " + store1.checkStock(p1));
         System.out.println("Number of this product available: " + store1.checkStock(p2));
