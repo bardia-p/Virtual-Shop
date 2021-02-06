@@ -40,7 +40,7 @@ public class Inventory{
     }
 
     // Find the number of stocks available for the product given its id
-    public Integer getStock (Integer id) {
+    public Integer getStock (int id) {
         int index = findProductIndex(id);
         if (index>=0) {
             return stocks.get(index);
