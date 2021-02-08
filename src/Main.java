@@ -5,11 +5,11 @@ public class Main {
     public static void main(String[] args) {
 
         // you can write some test code here
-        //creating a store manager
-//        StoreManager store = new StoreManager();
-//        Product p = new Product("n",1,1.0);
-//        System.out.println(store);
-//        System.out.println(store.checkStock(p));
+        // Creating a store manager
+        // StoreManager store = new StoreManager();
+        // Product p = new Product("n",1,1.0);
+        // System.out.println(store.makeTransaction(orders));
+        // System.out.println(store.checkStock(p));
 
         Inventory inv = new Inventory();
         StoreManager store1 = new StoreManager(inv);
