@@ -8,7 +8,7 @@ public class StoreManager {
      *
      */
     public StoreManager() {
-        inv = new Inventory();
+        this(new Inventory());
     }
 
     /**
