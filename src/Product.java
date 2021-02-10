@@ -1,6 +1,10 @@
-//Bardia Parmoun
-//101143006
-
+/**
+ * This class defines the basic type of the store which is a product. The attributes of
+ * a product are final and cann be changed
+ * @author Bardia Parmoun
+ * @version 1.0
+ * @date 2020/02/10
+ */
 
 public class Product{
     private final String name;
@@ -8,7 +12,7 @@ public class Product{
     private final double price;
 
     /**
-     *
+     * The constructor for the product class
      * @param name
      * @param id
      * @param price
@@ -21,19 +25,19 @@ public class Product{
 
     /**
      * getting the name of the product
-     * @return
+     * @return the name of the product
      */
     public String getName (){return name;}
 
     /**
      * getting the id of the product
-     * @return
+     * @return the id of the product
      */
     public int getId (){return id;}
 
     /**
      * getting the price of the product
-     * @return
+     * @return the price of the product
      */
     public double getPrice (){return price;}
 }

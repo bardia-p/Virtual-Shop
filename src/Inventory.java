@@ -1,14 +1,10 @@
-//Bardia Parmoun
-//101143006
-
-
 import java.util.ArrayList;
 
 /**
- * @author Bardia
- * @Version 1.0
- * February 10, 2021
  * Inventory class: Holds an inventory of available products and stock
+ * @author Bardia Parmoun
+ * @version 1.0
+ * @date 2020/02/10
  */
 
 public class Inventory{

@@ -1,17 +1,23 @@
-//Guy Morgenshtern
-//101151430
+/**
+ * This class manages the main interface of the store where the customers can check
+ * how many of each object is available and make transactions
+ * @name Guy Morgenshtern
+ * @version 1.0
+ * @date 2020/02/10
+ */
 
 public class StoreManager {
     private Inventory inv;
 
     /**
-     *
+     * The constructor for the StoreManager class in case there are not inputs
      */
     public StoreManager() {
         this(new Inventory());
     }
 
     /**
+     * The second constrcutror for the StoreManager class
      * If there is an inventory already in place
      * @param input_inv
      */
@@ -22,7 +28,7 @@ public class StoreManager {
     /**
      * Checks the number of stocks available of a given product given its object
      * @param product
-     * @return
+     * @return the number of productors available and 0 if the product does not exist
      */
     public int checkStock (Product product){
         if (product!=null){
@@ -34,14 +40,14 @@ public class StoreManager {
     /**
      * Takes a 2D array of orders in the form of [[product1, number1],...]] and applies the transaction
      * @param orders
-     * @return
+     * @return the total cost of the transaction (-1 if it was not successful)
      */
     public double makeTransaction(int[][] orders){
         double total = 0;
 
         // Checks to see if every part of the order is acceptable (i.e. there is enough of every product)
         for (int i=0; i<orders.length;i++){
-            if (inv.getStock(orders[i][0])<orders[i][1]){
+            if (checkStock(inv.getProductInfo(orders[i][0]))<orders[i][1]){
                 //transaction failed
                 return -1;
             }
