@@ -4,6 +4,14 @@
 
 import java.util.ArrayList;
 
+/**
+
+
+
+
+
+ */
+
 public class Inventory{
     private ArrayList<Product> products; // Keeps track of all the products
     private ArrayList<Integer> stocks; // Keeps track of the number of products available
@@ -26,7 +34,7 @@ public class Inventory{
     /**
      * Finds the index of a product in the arraylist of products given the id of the product
      * @param id
-     * @return
+     * @return int of product's index
      */
     private int findProductIndex(int id){
         for (int i=0; i<products.size(); i++){
@@ -40,7 +48,7 @@ public class Inventory{
     /**
      * Finds the product given its id
      * @param id
-     * @return
+     * @return Product object
      */
     public Product getProductInfo(int id){
         if (findProductIndex(id)!=-1){
@@ -52,7 +60,7 @@ public class Inventory{
     /**
      * Find the number of stocks available for the product given its id
      * @param id
-     * @return
+     * @return int of product's stock
      */
     public int getStock (int id) {
         int index = findProductIndex(id);
@@ -87,7 +95,7 @@ public class Inventory{
      * Removes a certain number stocks from a product
      * @param product
      * @param newStock
-     * @return
+     * @return boolean if removeStock was successful
      */
     public boolean removeStock (Product product, int newStock){
         int index = products.indexOf(product);
