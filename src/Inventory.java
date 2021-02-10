@@ -5,18 +5,21 @@
 import java.util.ArrayList;
 
 /**
-
-
-
-
-
+ * @author Bardia
+ * @Version 1.0
+ * February 10, 2021
+ * Inventory class: Holds an inventory of available products and stock
  */
 
 public class Inventory{
     private ArrayList<Product> products; // Keeps track of all the products
     private ArrayList<Integer> stocks; // Keeps track of the number of products available
 
-
+    /**
+     * Constructor
+     * initializes parallel arraylists
+     * creates default products
+     */
     public Inventory(){
         this.products = new ArrayList<>();
         this.stocks = new ArrayList<>();
