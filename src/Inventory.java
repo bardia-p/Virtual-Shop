@@ -10,8 +10,17 @@ public class Inventory{
 
 
     public Inventory(){
-        this.products = new ArrayList<Product>();
-        this.stocks = new ArrayList<Integer>();
+        this.products = new ArrayList<>();
+        this.stocks = new ArrayList<>();
+
+        // making some default products
+        Product p1 = new Product("milk", 123,2.99);
+        Product p2 = new Product("juice", 456,3.99);
+        Product p3 = new Product("cake", 789,4.99);
+
+        this.addStock(p1,20);
+        this.addStock(p2,10);
+        this.addStock(p3,5);
     }
 
     /**
@@ -34,25 +43,10 @@ public class Inventory{
      * @return
      */
     public Product getProductInfo(int id){
-        return products.get(findProductIndex(id));
-    }
-
-    /**
-     * Gets the name of the product given its id
-     * @param id
-     * @return
-     */
-    public String getProductName(int id){
-        return getProductInfo(id).getName();
-    }
-
-    /**
-     * Gets the price of the product given its id
-     * @param id
-     * @return
-     */
-    public double getProductPrice(int id){
-        return getProductInfo(id).getPrice();
+        if (findProductIndex(id)!=-1){
+            return products.get(findProductIndex(id));
+        }
+        return null;
     }
 
     /**
@@ -75,7 +69,6 @@ public class Inventory{
      * @param newStock
      */
     public void addStock (Product product, int newStock){
-        int currentStock;
         int index = products.indexOf(product);
 
         // If the product already exists it adds to the existing value
@@ -97,7 +90,6 @@ public class Inventory{
      * @return
      */
     public boolean removeStock (Product product, int newStock){
-        int currentStock;
         int index = products.indexOf(product);
 
         // If the product already exists it removes from the existing values

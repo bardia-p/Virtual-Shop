@@ -25,7 +25,10 @@ public class StoreManager {
      * @return
      */
     public int checkStock (Product product){
-        return inv.getStock(product.getId());
+        if (product!=null){
+            return inv.getStock(product.getId());
+        }
+        return 0;
     }
 
     /**
@@ -46,7 +49,7 @@ public class StoreManager {
 
         // Proceeds to calculate cost of the order and removing it from the stock
         for (int i=0; i<orders.length;i++){
-            total +=inv.getProductPrice(orders[i][0])*orders[i][1];
+            total +=inv.getProductInfo(orders[i][0]).getPrice()*orders[i][1];
             inv.removeStock(inv.getProductInfo(orders[i][0]),orders[i][1]);
         }
         return Math.round(total);
