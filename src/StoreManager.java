@@ -47,7 +47,7 @@ public class StoreManager {
         // Proceeds to calculate cost of the order and removing it from the stock
         for (int i=0; i<orders.length;i++){
             total +=inv.getProductPrice(orders[i][0])*orders[i][1];
-            inv.removeStock(inv.findProduct(orders[i][0]),orders[i][1]);
+            inv.removeStock(inv.getProductInfo(orders[i][0]),orders[i][1]);
         }
         return Math.round(total);
     }

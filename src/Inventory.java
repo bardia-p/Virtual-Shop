@@ -33,7 +33,7 @@ public class Inventory{
      * @param id
      * @return
      */
-    public Product findProduct(int id){
+    public Product getProductInfo(int id){
         return products.get(findProductIndex(id));
     }
 
@@ -43,7 +43,7 @@ public class Inventory{
      * @return
      */
     public String getProductName(int id){
-        return findProduct(id).getName();
+        return getProductInfo(id).getName();
     }
 
     /**
@@ -52,7 +52,7 @@ public class Inventory{
      * @return
      */
     public double getProductPrice(int id){
-        return findProduct(id).getPrice();
+        return getProductInfo(id).getPrice();
     }
 
     /**
