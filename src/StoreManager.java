@@ -77,7 +77,9 @@ public class StoreManager {
         for (Product product: orders.keySet()){
             total +=product.getPrice()*orders.get(product);
             inv.removeStock(product,orders.get(product));
+            orders.remove(product);
         }
+        carts[cart.getId()] = true;
         return Math.round(total);
     }
 

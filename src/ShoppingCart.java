@@ -7,4 +7,9 @@ public class ShoppingCart extends Inventory {
     public void setId(int id){
         this.cartId = id;
     }
+
+    public int getId(){
+        return this.cartId ;
+    }
+
 }
