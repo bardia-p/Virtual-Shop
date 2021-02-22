@@ -1,7 +1,4 @@
-//Bardia Parmoun 101143006
-//Guy Morgenshtern 101151430
-
-public class Main {
+public class StoreView {
     public static void main(String[] args) {
 
         // you can write some test code here

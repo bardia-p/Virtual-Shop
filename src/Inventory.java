@@ -1,4 +1,7 @@
-import java.util.ArrayList;
+//Bardia Parmoun 101143006
+//Guy Morgenshtern 101151430
+
+import java.util.HashMap;
 
 /**
  * Inventory class: Holds an inventory of available products and stock
@@ -8,8 +11,7 @@ import java.util.ArrayList;
  */
 
 public class Inventory{
-    private ArrayList<Product> products; // Keeps track of all the products
-    private ArrayList<Integer> stocks; // Keeps track of the number of products available
+    private HashMap<Product, Integer> products; // keeps track of the products of the stocks
 
     /**
      * Constructor
@@ -17,8 +19,7 @@ public class Inventory{
      * creates default products
      */
     public Inventory(){
-        this.products = new ArrayList<>();
-        this.stocks = new ArrayList<>();
+        this.products = new HashMap<>();
 
         // making some default products
         Product p1 = new Product("milk", 123,2.99);
@@ -30,18 +31,22 @@ public class Inventory{
         this.addStock(p3,5);
     }
 
+    public HashMap<Product, Integer> getProducts(){
+        return this.products;
+    }
+
     /**
      * Finds the index of a product in the arraylist of products given the id of the product
      * @param id
      * @return int of product's index
      */
-    private int findProductIndex(int id){
-        for (int i=0; i<products.size(); i++){
-            if (products.get(i).getId()==id){
-                return i;
+    private Product findProduct(int id){
+        for (Product product: products.keySet()){
+            if (product.getId()==id){
+                return product;
             }
         }
-        return -1;
+        return null;
     }
 
     /**
@@ -50,10 +55,7 @@ public class Inventory{
      * @return Product object
      */
     public Product getProductInfo(int id){
-        if (findProductIndex(id)!=-1){
-            return products.get(findProductIndex(id));
-        }
-        return null;
+        return findProduct(id);
     }
 
     /**
@@ -62,9 +64,9 @@ public class Inventory{
      * @return int of product's stock
      */
     public int getStock (int id) {
-        int index = findProductIndex(id);
-        if (index>=0) {
-            return stocks.get(index);
+        Product product = findProduct(id) ;
+        if (product!=null) {
+            return products.get(product);
         }
         //product does not exist
         return -1;
@@ -76,17 +78,15 @@ public class Inventory{
      * @param newStock
      */
     public void addStock (Product product, int newStock){
-        int index = products.indexOf(product);
 
         // If the product already exists it adds to the existing value
-        if (index != -1) {
-            stocks.set(index,stocks.get(index)+newStock);
+        if (getStock(product.getId())!=-1) {
+            products.put(product,products.get(product)+ newStock);
         }
 
         // If this is a new product it adds it to both the products and stocks arraylists
         else{
-            products.add(product);
-            stocks.add(newStock);
+            products.put(product, newStock);
         }
     }
 
@@ -97,17 +97,16 @@ public class Inventory{
      * @return boolean if removeStock was successful
      */
     public boolean removeStock (Product product, int newStock){
-        int index = products.indexOf(product);
 
         // If the product already exists it removes from the existing values
-        if (index != -1) {
-            if (stocks.get(index)-newStock>=0){
-                stocks.set(index,stocks.get(index)-newStock);
+        if (getStock(product.getId())!=-1) {
+            if (products.get(product)-newStock>=0){
+                products.put(product,products.get(product)- newStock);
             }
 
             // If the final value is less than 0 it just sets it to 0
             else{
-                stocks.set(index,0);
+                products.put(product,0);
             }
             return true;
         }
