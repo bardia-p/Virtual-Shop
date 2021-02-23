@@ -2,7 +2,12 @@
 //Guy Morgenshtern 101151430
 
 public class ShoppingCart extends Inventory {
-    int cartId;
+    private int cartId;
+
+    public ShoppingCart (int cartId) {
+        super();
+        this.cartId = cartId;
+    }
 
     public void setId(int id){
         this.cartId = id;

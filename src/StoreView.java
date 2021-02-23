@@ -1,47 +1,60 @@
+import java.util.Locale;
+import java.util.Scanner;
+
 public class StoreView {
-    public static void main(String[] args) {
 
-        // you can write some test code here
-        // Creating a store manager
-        // StoreManager store = new StoreManager();
-        // Product p = new Product("n",1,1.0);
-        // System.out.println(store.makeTransaction(orders));
-        // System.out.println(store.checkStock(p));
+    private StoreManager storeManager;
+    private ShoppingCart cart;
 
-        Inventory inv = new Inventory();
-        StoreManager store1 = new StoreManager(inv);
-        /*
-        Product p1 = new Product("milk", 123,2.99);
-        Product p2 = new Product("juice", 456,3.99);
-        Product p3 = new Product("cake", 789,4.99);
-
-
-        inv.addStock(p1,20);
-        inv.addStock(p2,10);
-        inv.addStock(p3,5); */
-
-        System.out.println("Number of this product available: " + store1.checkStock(inv.getProductInfo(123)));
-        System.out.println("Number of this product available: " + store1.checkStock(inv.getProductInfo(000)));
-
-        int[][] orders1 ={{123,15},{456,6},{789,3}};
-        System.out.println("The cost of the transaction? $"+ store1.makeTransaction(orders1));
-
-        int[][] orders2 ={{123,5},{456,1},{789,2}};
-        System.out.println("The cost of the transaction? $"+ store1.makeTransaction(orders2));
-
-        int[][] orders3 ={{000,15}};
-        System.out.println("The cost of the transaction? $"+ store1.makeTransaction(orders3));
-
-        Product p4 = new Product("apple", 000,1.99);
-        inv.addStock(p4,30);
-        inv.addStock(inv.getProductInfo(123),10);
-
-        int[][] orders4 ={{000,15},{123,5}};
-        System.out.println("The cost of the transaction? $"+ store1.makeTransaction(orders4));
-
-        System.out.println("Number of this product available: " + store1.checkStock(inv.getProductInfo(123)));
-        System.out.println("Number of this product available: " + store1.checkStock(inv.getProductInfo(456)));
-        System.out.println("Number of this product available: " + store1.checkStock(inv.getProductInfo(789)));
-        System.out.println("Number of this product available: " + store1.checkStock(inv.getProductInfo(000)));
+    public StoreView() {
+        storeManager  = new StoreManager();
+        cart = new ShoppingCart(storeManager.generateCartId());
+        main();
     }
+
+    public void main() {
+        Scanner sc = new Scanner(System.in);
+        String input;
+
+        System.out.println("--------Guy and Bardia, Pie and Media--------");
+        System.out.println("Cart ID: " + cart.getId()); // necessary?
+
+
+        System.out.print("-> ");
+        input = sc.nextLine().toLowerCase();
+
+        while (!input.equals("quit")) {
+
+            if (input.equals("browse")) {
+                this.displayItems();
+            }
+            sc.nextLine();
+        }
+    }
+
+    public void displayItems() {
+        String name;
+        String stock;
+        String price;
+        String printMsg;
+
+        System.out.println("Stock        Product        Price");
+        System.out.println("_________________________________");
+        for (int i = 0; i < storeManager.getAvailableProducts().size(); i++) {
+
+            name = storeManager.getAvailableProducts().get(i).getName();
+            stock = String.valueOf(storeManager.checkStock(storeManager.getAvailableProducts().get(i)));
+            price = String.valueOf(storeManager.getAvailableProducts().get(i).getPrice());
+
+            printMsg = String.format("%s" +"%" + (13-stock.length() + name.length()) +"s" + "%" +
+                    (15 - name.length() + price.length()) + "s", stock,name, price);
+
+            System.out.println(printMsg);
+
+        }
+    }
+
+    public void addToCart(String product, int amount) {
+    }
+
 }
