@@ -4,21 +4,32 @@
 /**
  * This class defines the basic type of the store which is a product. The attributes of
  * a product are final and cann be changed
- * @author Bardia Parmoun
- * @version 1.0
- * @date 2020/02/10
+ * @author Bardia Parmoun 101143006
+ * @version 2.0
+ * @date 2020/02/27
  */
 
 public class Product{
+    /**
+     * Keeps track of the name of the product
+     */
     private final String NAME;
+
+    /**
+     * Keeps track of the ID of the product
+     */
     private final int ID;
+
+    /**
+     * Keeps track of the price of the product
+     */
     private final double PRICE;
 
     /**
      * The constructor for the product class
-     * @param name
-     * @param id
-     * @param price
+     * @param name the name of the product
+     * @param id the id of the product
+     * @param price the price of the product
      */
     public Product(String name, int id, double price){
         this.NAME = name;

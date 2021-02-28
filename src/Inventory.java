@@ -5,13 +5,17 @@ import java.util.HashMap;
 
 /**
  * Inventory class: Holds an inventory of available products and stock
- * @author Bardia Parmoun
- * @version 1.0
- * @date 2020/02/10
+ * @author Bardia Parmoun 101143006
+ * @version 2.0
+ * @date 2020/02/27
  */
 
 public class Inventory{
-    private HashMap<Product, Integer> products; // keeps track of the products of the stocks
+
+    /**
+     * Keeps track of the products and their stock
+     */
+    private HashMap<Product, Integer> products;
 
     /**
      * Constructor
@@ -20,24 +24,50 @@ public class Inventory{
      */
     public Inventory(){
         this.products = new HashMap<>();
+        initializeInventory();
+    }
 
+    /**
+     * Another constructor for the inventory class that gets a HashMap of products as its input
+     * @param products the already made inventory that can be used to initialize the inventory with
+     */
+    public Inventory(HashMap<Product, Integer> products){
+        this.products = products;
+    }
+
+
+    /**
+     * Initializes the inventory with some default products
+     */
+    private void initializeInventory(){
         // making some default products
-        Product p1 = new Product("milk", 123,2.99);
-        Product p2 = new Product("juice", 456,3.99);
-        Product p3 = new Product("cake", 789,4.99);
+        Product p1 = new Product("apple pie", 001,2.99);
+        Product p2 = new Product("blueberry pie", 002,3.99);
+        Product p3 = new Product("cake", 003,4.99);
+
+        Product p4 = new Product("cooking book", 101,15.99);
+        Product p5 = new Product("baking recipes", 102,8.99);
+        Product p6 = new Product("cooking tutorials", 103,19.99);
 
         this.addStock(p1,20);
         this.addStock(p2,10);
         this.addStock(p3,5);
+        this.addStock(p4,8);
+        this.addStock(p5,8);
+        this.addStock(p6,8);
     }
 
+    /**
+     * Returns the products of the Inventory
+     * @return the products hashmap
+     */
     public HashMap<Product, Integer> getProducts(){
         return this.products;
     }
 
     /**
      * Finds the index of a product in the arraylist of products given the id of the product
-     * @param id
+     * @param id the id of the product
      * @return int of product's index
      */
     private Product findProduct(int id){
@@ -51,7 +81,7 @@ public class Inventory{
 
     /**
      * Finds the product given its id
-     * @param id
+     * @param id the id of the product
      * @return Product object
      */
     public Product getProductInfo(int id){
@@ -60,7 +90,7 @@ public class Inventory{
 
     /**
      * Find the number of stocks available for the product given its id
-     * @param id
+     * @param id the id of the product
      * @return int of product's stock
      */
     public int getStock (int id) {
@@ -74,8 +104,8 @@ public class Inventory{
 
     /**
      * Increases the number of products
-     * @param product
-     * @param newStock
+     * @param product the product to add stocks to
+     * @param newStock the number of stocks to add to the given products
      */
     public void addStock (Product product, int newStock){
 
@@ -92,8 +122,8 @@ public class Inventory{
 
     /**
      * Removes a certain number stocks from a product
-     * @param product
-     * @param newStock
+     * @param product the product to remove stocks from
+     * @param newStock the number of stocks to remove from the product
      * @return boolean if removeStock was successful
      */
     public boolean removeStock (Product product, int newStock){
