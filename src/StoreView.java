@@ -1,8 +1,9 @@
 //Bardia Parmoun 101143006
 //Guy Morgenshtern 101151430
 
-import java.util.Locale;
 import java.util.Scanner;
+import java.util.HashMap;
+
 
 /**
  * The class that assigns each user a store view and keeps track of all the storeviews
@@ -41,11 +42,13 @@ public class StoreView {
         // The number of allowed active users
         int activeSV = 3;
 
+
         StoreView[] customers = new StoreView[activeSV];
 
         for (int i=0; i<activeSV; i++){
             customers[i] = new StoreView(sm, sm.generateCartId());
         }
+
 
         Scanner sc = new Scanner(System.in);
 
@@ -83,6 +86,8 @@ public class StoreView {
         String input;
         String product;
         int amount;
+
+
 
         input = "";
         while (!input.equals("quit")){
@@ -180,8 +185,8 @@ public class StoreView {
         String price;
         String printMsg;
 
-        System.out.println("Stock        Product        Price");
-        System.out.println("_________________________________");
+        System.out.println("Stock                 Product                Price");
+        System.out.println("__________________________________________________");
         for (int i = 0; i < storeManager.getAvailableProducts().size(); i++) {
 
             name = storeManager.getAvailableProducts().get(i).getName();
@@ -189,7 +194,7 @@ public class StoreView {
             price = String.valueOf(storeManager.getAvailableProducts().get(i).getPrice());
 
             printMsg = String.format("%s" +"%" + (20-stock.length() + name.length()) +"s" + "%" +
-                    (15 - name.length() + price.length()) + "s", stock,name, price);
+                    (20 - name.length() + price.length()) + "s", stock,name, price);
 
             System.out.println(printMsg);
 
@@ -250,6 +255,7 @@ public class StoreView {
     public void emptyCart(){
         for (Product p: cart.getProducts().keySet()){
             removeFromCart(p.getName(), cart.getProducts().get(p));
+            cart.getProducts().remove(p);
         }
     }
 }
