@@ -86,15 +86,15 @@ public class StoreManager {
     public double checkout(ShoppingCart cart){
         double total = 0;
         HashMap<Product, Integer> orders= cart.getProducts();
-        int size = orders.size();
 
+        /*
         // Checks to see if every part of the order is acceptable (i.e. there is enough of every product)
         for (Product product: orders.keySet()){
             if (checkStock(product)<orders.get(product)){
-                //transaction failed
+                // transaction failed
                 return -1;
             }
-        }
+        }*/
 
         // Proceeds to calculate cost of the order and removing it from the stock
         for (Product product: orders.keySet()){

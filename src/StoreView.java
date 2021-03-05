@@ -2,7 +2,6 @@
 //Guy Morgenshtern 101151430
 
 import java.util.Scanner;
-import java.util.HashMap;
 
 
 /**
@@ -79,7 +78,7 @@ public class StoreView {
 
     /**
      * Calls the main UI for the program to allow for different items to be called
-     * @return
+     * @return true if the UI finished successfully
      */
     public boolean displayGUI(){
         Scanner sc = new Scanner(System.in);
@@ -185,7 +184,7 @@ public class StoreView {
         String price;
         String printMsg;
 
-        System.out.println("Stock                 Product                Price");
+        System.out.println("Stock             Product                Price");
         System.out.println("__________________________________________________");
         for (int i = 0; i < storeManager.getAvailableProducts().size(); i++) {
 
@@ -193,8 +192,8 @@ public class StoreView {
             stock = String.valueOf(storeManager.checkStock(storeManager.getAvailableProducts().get(i)));
             price = String.valueOf(storeManager.getAvailableProducts().get(i).getPrice());
 
-            printMsg = String.format("%s" +"%" + (20-stock.length() + name.length()) +"s" + "%" +
-                    (20 - name.length() + price.length()) + "s", stock,name, price);
+            printMsg = String.format("%s" +"%" + (15-stock.length() + name.length()) +"s" + "%" +
+                    (25 - name.length() + price.length()) + "s", stock,name, price);
 
             System.out.println(printMsg);
 
@@ -225,7 +224,7 @@ public class StoreView {
         Product p = findProduct(product);
         if (p!=null && amount<=storeManager.getInventory().getStock(p.getId()) && amount>0){
             if (storeManager.getInventory().removeStock(p, amount)) {
-                cart.addStock(findProduct(product), amount);
+                cart.addStock(p, amount);
                 return true;
             }
         }
@@ -240,8 +239,8 @@ public class StoreView {
      */
     public boolean removeFromCart(String product, int amount) {
         Product p = findProduct(product);
-        if (findProduct(product)!=null && amount<=cart.getStock(p.getId()) && amount>0){
-            if (cart.removeStock(findProduct(product), amount)){
+        if (p!=null && amount<=cart.getStock(p.getId()) && amount>0){
+            if (cart.removeStock(p, amount)){
                 storeManager.getInventory().addStock(p, amount);
                 return true;
             }

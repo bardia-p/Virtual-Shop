@@ -20,7 +20,7 @@ public class ShoppingCart extends Inventory {
      * @param cartId the id that is assigned ot the cart
      */
     public ShoppingCart (int cartId) {
-        super(new HashMap<Product, Integer>());
+        super(new HashMap<>());
         this.cartId = cartId;
     }
 
