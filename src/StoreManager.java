@@ -18,7 +18,10 @@ public class StoreManager {
      */
     private Inventory inv;
 
-    private static int ID_COUNTER = 0;
+    /**
+     * an id counter used to assign each cart a new id
+     */
+    private static int id_counter = 0;
 
     /**
      * An array used to keep track of the all the carts
@@ -103,7 +106,7 @@ public class StoreManager {
      * @return the generated cart id
      */
     public int assignNewCartID(){
-        int newId = ID_COUNTER++;
+        int newId = id_counter++;
         carts.put(newId, new ShoppingCart(newId));
         return newId;
     }
