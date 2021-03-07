@@ -107,19 +107,19 @@ public class Inventory{
      * @param product the product to add stocks to
      * @param newStock the number of stocks to add to the given products
      */
-    public void addStock (Product product, int newStock){
+    public void addStock (Product product, int newStock) {
 
         // If the product already exists it adds to the existing value
-        if (getStock(product.getId())!=-1) {
-            products.put(product,products.get(product)+ newStock);
+        if (getStock(product.getId()) != -1) {
+            products.put(product, products.get(product) + newStock);
         }
 
         // If this is a new product it adds it to both the products and stocks arraylists
-        else{
+        else {
             products.put(product, newStock);
         }
     }
-
+    
     /**
      * Removes a certain number stocks from a product
      * @param product the product to remove stocks from

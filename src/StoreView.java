@@ -17,9 +17,9 @@ public class StoreView {
     private StoreManager storeManager;
 
     /**
-     * Keeps track of the cart for the user
+     * Keeps track of the cartid
      */
-    private ShoppingCart cart;
+    private int cartId;
 
     /**
      * The default constructor for storeview which creates an instance of a user
@@ -28,7 +28,7 @@ public class StoreView {
      */
     public StoreView(StoreManager storeManager, int cartId) {
         this.storeManager = storeManager;
-        this.cart = new ShoppingCart(cartId);
+        this.cartId = cartId;
     }
 
     /**
@@ -45,7 +45,7 @@ public class StoreView {
         StoreView[] customers = new StoreView[activeSV];
 
         for (int i=0; i<activeSV; i++){
-            customers[i] = new StoreView(sm, sm.generateCartId());
+            customers[i] = new StoreView(sm, sm.assignNewCartID());
         }
 
 
@@ -92,7 +92,7 @@ public class StoreView {
         while (!input.equals("quit")){
             System.out.println("--------Guy and Bardia, Pie and Media--------");
             System.out.println("Type 'help' for a list of commands");
-            System.out.println("CART>>>"+cart.getTotalPrice());
+            System.out.println("CART>>>"+storeManager.getCart(cartId).getTotalPrice());
             System.out.println("Enter a new command");
             input = sc.nextLine().toLowerCase();
 
@@ -123,7 +123,7 @@ public class StoreView {
 
             // Checks out the user
             else if (input.equals("checkout")){
-                storeManager.checkout(cart);
+                storeManager.checkout(storeManager.getCart(cartId));
                 return true;
             }
 
@@ -164,7 +164,7 @@ public class StoreView {
             // quits the user
             else if (input.equals("quit")){
                 emptyCart();
-                storeManager.checkout(cart);
+                storeManager.checkout(storeManager.getCart(cartId));
             }
 
             else{
@@ -224,7 +224,7 @@ public class StoreView {
         Product p = findProduct(product);
         if (p!=null && amount<=storeManager.getInventory().getStock(p.getId()) && amount>0){
             if (storeManager.getInventory().removeStock(p, amount)) {
-                cart.addStock(p, amount);
+                storeManager.getCart(cartId).addStock(p, amount);
                 return true;
             }
         }
@@ -239,8 +239,8 @@ public class StoreView {
      */
     public boolean removeFromCart(String product, int amount) {
         Product p = findProduct(product);
-        if (p!=null && amount<=cart.getStock(p.getId()) && amount>0){
-            if (cart.removeStock(p, amount)){
+        if (p!=null && amount<=storeManager.getCart(cartId).getStock(p.getId()) && amount>0){
+            if (storeManager.getCart(cartId).removeStock(p, amount)){
                 storeManager.getInventory().addStock(p, amount);
                 return true;
             }
@@ -252,9 +252,9 @@ public class StoreView {
      * Empties the cart and removes all of its items in cases theuser quits
      */
     public void emptyCart(){
-        for (Product p: cart.getProducts().keySet()){
-            removeFromCart(p.getName(), cart.getProducts().get(p));
-            cart.getProducts().remove(p);
+        for (Product p: storeManager.getCart(cartId).getProducts().keySet()){
+            removeFromCart(p.getName(), storeManager.getCart(cartId).getProducts().get(p));
+            storeManager.getCart(cartId).getProducts().remove(p);
         }
     }
 }

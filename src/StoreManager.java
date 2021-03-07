@@ -18,16 +18,12 @@ public class StoreManager {
      */
     private Inventory inv;
 
-    /**
-     * A constant used to keep track of the total number of carts that can be one at the same time in the store
-     */
-    private final int TOTALCARTS = 100;
+    private static int ID_COUNTER = 0;
 
     /**
-     * An array used to keep track of the all the carts to see if there are any new ones available to assign them to new
-     * customers
+     * An array used to keep track of the all the carts
      */
-    private boolean carts[] ;
+    private HashMap<Integer,ShoppingCart> carts ;
 
 
     /**
@@ -44,17 +40,7 @@ public class StoreManager {
      */
     public StoreManager(Inventory inv) {
         this.inv = inv;
-        carts = new boolean[TOTALCARTS];
-        initializeCartIds();
-    }
-
-    /**
-     * Initializing all the carts to be free so they can be assigned to new users
-     */
-    private void initializeCartIds (){
-        for (int i =0; i<TOTALCARTS; i++){
-            carts[i] = true;
-        }
+       carts = new HashMap<>();
     }
 
 
@@ -108,7 +94,7 @@ public class StoreManager {
         System.out.printf("%s = $%.2f\n", "Total", total);
 
         // Making the cart available again
-        carts[cart.getId()] = true;
+        carts.remove(cart.getId());
         return Math.round(total);
     }
 
@@ -116,15 +102,10 @@ public class StoreManager {
      * Generates a cart id based on the fire available cart
      * @return the generated cart id
      */
-    public int generateCartId (){
-        for (int i=0; i<TOTALCARTS; i++){
-            if (carts[i]){
-                return i;
-            }
-        }
-
-        // there are no free carts
-        return -1;
+    public int assignNewCartID(){
+        int newId = ID_COUNTER++;
+        carts.put(newId, new ShoppingCart(newId));
+        return newId;
     }
 
     /**
@@ -141,5 +122,14 @@ public class StoreManager {
         }
 
         return availableProducts;
+    }
+
+    /**
+     * Returns the cart for a given id
+     * @param id the id for the cart to retrieve
+     * @return the cart
+     */
+    public ShoppingCart getCart(int id){
+        return carts.get(id);
     }
 }
