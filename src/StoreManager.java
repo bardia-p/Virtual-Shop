@@ -43,7 +43,7 @@ public class StoreManager {
      */
     public StoreManager(Inventory inv) {
         this.inv = inv;
-       carts = new HashMap<>();
+        carts = new HashMap<>();
     }
 
 
