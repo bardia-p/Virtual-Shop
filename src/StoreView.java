@@ -128,7 +128,7 @@ public class StoreView {
         else if (input.equals("addtocart")){
             System.out.println("-------------ADD--------------");
             displayItems();
-            System.out.println("Enter the name of the product");
+            System.out.println("Enter the name of the product (type 'back' to exit this mode)");
             product = sc.nextLine().toLowerCase();
             if (!product.equals("back")) {
                 System.out.println("Enter the amount");
@@ -137,7 +137,7 @@ public class StoreView {
                 // Makes sure the product and its stock exist in the inventory
                 while (!addToCart(product, amount)) {
                     System.out.println("Invalid product name or amount");
-                    System.out.println("Enter the name of the product");
+                    System.out.println("Enter the name of the product (type 'back' to exit this mode)");
                     product = sc.nextLine().toLowerCase();
 
                     if (product.equals("back")) {
@@ -157,14 +157,14 @@ public class StoreView {
             System.out.println("--------------REMOVE--------------");
             displayCart();
             if (storeManager.getCart(cartId).getProducts().size()!=0) {
-                System.out.println("Enter the name of the product");
+                System.out.println("Enter the name of the product (type 'back' to exit this mode)");
                 product = sc.nextLine().toLowerCase();
                 if (!product.equals("back")) {
                     System.out.println("Enter the amount");
                     amount = Integer.parseInt(sc.nextLine());
                     while (!removeFromCart(product, amount)) {
                         System.out.println("Invalid product name or amount");
-                        System.out.println("Enter the name of the product");
+                        System.out.println("Enter the name of the product (type 'back' to exit this mode)");
                         product = sc.nextLine().toLowerCase();
 
                         if (product.equals("back")) {
