@@ -33,7 +33,7 @@ public class StoreView {
 
     /**
      * The main method that lets the users interact with the store
-     * @param args
+     * @param args used to get arguments when running the program (not used in this program)
      */
     public static void main(String[] args){
         StoreManager sm = new StoreManager();
@@ -56,16 +56,23 @@ public class StoreView {
         while (activeSV>0){
             System.out.printf("Number of actve users: %d\n",activeSV);
             System.out.println("CHOOSE YOUR STOREVIEW>>>");
-            int storeId = sc.nextInt();
+            int storeId = Integer.parseInt(sc.nextLine());
 
             // Checks to see if the entered storeview is within the given range
             if (storeId >= 0 && storeId <customers.length){
                 // Checks to see if the storeview is available
                 if (customers[storeId]!=null){
-                    if (customers[storeId].displayGUI()) {
-                        customers[storeId] = null;
-                        activeSV--;
+                    String userChoice = "n";
+                    while (!userChoice.equals("y")){
+                        if (!customers[storeId].displayGUI()) {
+                            customers[storeId] = null;
+                            activeSV--;
+                            break;
+                        }
+                        System.out.print("GO TO ANOTHER STOREVIEW? (y) >>> ");
+                        userChoice = sc.nextLine().toLowerCase();
                     }
+
                 } else{
                     System.out.println("MAIN > ERROR > BAD CHOICE\nTHAT STOREVIEW WAS DEACTIVATED");
                 }
@@ -89,90 +96,83 @@ public class StoreView {
 
 
         input = "";
-        while (!input.equals("quit")){
-            System.out.println("--------Guy and Bardia, Pie and Media--------");
-            System.out.println("Type 'help' for a list of commands");
-            System.out.println("CART>>>"+storeManager.getCart(cartId).getTotalPrice());
-            System.out.println("Enter a new command");
-            input = sc.nextLine().toLowerCase();
+        System.out.println("--------Guy and Bardia, Pie and Media--------");
+        System.out.println("Type 'help' for a list of commands");
+        System.out.println("CART>>>"+storeManager.getCart(cartId).getTotalPrice());
+        System.out.println("Enter a new command");
+        input = sc.nextLine().toLowerCase();
 
-            // Displays the possible commands that can be entered
-            if (input.equals("help")){
-                System.out.println("Type 'browse' to view all the items in the store");
-                System.out.println("Type 'addtocart' to add new items to the cart");
-                System.out.println("Type 'checkout' to checkout");
-                System.out.println("Type 'quit' to quit");
-            }
-
-            // Displays all the items in the store
-            else if (input.equals("browse")){
-                System.out.println("-------------browse--------------");
-                displayItems();
-
-                // Give the program the option to switch to another user
-                String chooseAnother = "";
-                while (!chooseAnother.toLowerCase().equals("n")){
-                    if (chooseAnother.toLowerCase().equals("y")) {
-                        return false;
-                    }
-                    System.out.print("GO TO ANOTHER STOREVIEW? (y) >>> ");
-                    chooseAnother = sc.nextLine().toLowerCase();
-                }
-
-            }
-
-            // Checks out the user
-            else if (input.equals("checkout")){
-                storeManager.checkout(storeManager.getCart(cartId));
-                return true;
-            }
-
-            // Adds a new item to the user cart
-            else if (input.equals("addtocart")){
-                System.out.println("-------------ADD--------------");
-                displayItems();
-                System.out.println("Enter the name of the product");
-                product = sc.nextLine().toLowerCase();
-                System.out.println("Enter the amount");
-                amount = Integer.parseInt(sc.nextLine());
-
-                // Makes sure the product and its stock exist in the inventory
-                while (!addToCart(product,amount)){
-                    System.out.println("Invalid product name or amount");
-                    System.out.println("Enter the name of the product");
-                    product = sc.nextLine().toLowerCase();
-                    System.out.println("Enter the amount");
-                    amount = Integer.parseInt(sc.nextLine());
-                }
-            }
-
-            // Makes sure the product and its stock exist in the cart
-            else if (input.equals("removefromcart")){
-                System.out.println("Enter the name of the product");
-                product = sc.nextLine().toLowerCase();
-                System.out.println("Enter the amount");
-                amount = Integer.parseInt(sc.nextLine());
-                while (!removeFromCart(product,amount)){
-                    System.out.println("Invalid product name or amount");
-                    System.out.println("Enter the name of the product");
-                    product = sc.nextLine().toLowerCase();
-                    System.out.println("Enter the amount");
-                    amount = Integer.parseInt(sc.nextLine());
-                }
-            }
-
-            // quits the user
-            else if (input.equals("quit")){
-                emptyCart();
-                storeManager.checkout(storeManager.getCart(cartId));
-            }
-
-            else{
-                System.out.println("Invalid command was entered");
-            }
+        // Displays the possible commands that can be entered
+        if (input.equals("help")){
+            System.out.println("Type 'browse' to view all the items in the store");
+            System.out.println("Type 'addtocart' to add new items to the cart");
+            System.out.println("Type 'checkout' to checkout");
+            System.out.println("Type 'quit' to quit");
+            return true;
         }
 
-        return true;
+        // Displays all the items in the store
+        else if (input.equals("browse")){
+            System.out.println("-------------browse--------------");
+            displayItems();
+            return true;
+        }
+
+        // Checks out the user
+        else if (input.equals("checkout")){
+            storeManager.checkout(storeManager.getCart(cartId));
+            return false;
+        }
+
+        // Adds a new item to the user cart
+        else if (input.equals("addtocart")){
+            System.out.println("-------------ADD--------------");
+            displayItems();
+            System.out.println("Enter the name of the product");
+            product = sc.nextLine().toLowerCase();
+            System.out.println("Enter the amount");
+            amount = Integer.parseInt(sc.nextLine());
+
+            // Makes sure the product and its stock exist in the inventory
+            while (!addToCart(product,amount)){
+                System.out.println("Invalid product name or amount");
+                System.out.println("Enter the name of the product");
+                product = sc.nextLine().toLowerCase();
+                System.out.println("Enter the amount");
+                amount = Integer.parseInt(sc.nextLine());
+            }
+            System.out.println("CART>>>"+storeManager.getCart(cartId).getTotalPrice());
+            return true;
+        }
+
+        // Makes sure the product and its stock exist in the cart
+        else if (input.equals("removefromcart")){
+            System.out.println("Enter the name of the product");
+            product = sc.nextLine().toLowerCase();
+            System.out.println("Enter the amount");
+            amount = Integer.parseInt(sc.nextLine());
+            while (!removeFromCart(product,amount)){
+                System.out.println("Invalid product name or amount");
+                System.out.println("Enter the name of the product");
+                product = sc.nextLine().toLowerCase();
+                System.out.println("Enter the amount");
+                amount = Integer.parseInt(sc.nextLine());
+            }
+            System.out.println("CART>>>"+storeManager.getCart(cartId).getTotalPrice());
+            return true;
+        }
+
+        // quits the user
+        else if (input.equals("quit")){
+            emptyCart();
+            storeManager.checkout(storeManager.getCart(cartId));
+            return false;
+        }
+
+        else{
+            System.out.println("Invalid command was entered");
+            return true;
+        }
     }
 
     /**
