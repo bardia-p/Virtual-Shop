@@ -227,14 +227,14 @@ public class StoreView {
         String price;
         String printMsg;
 
-        if (storeManager.getCartProducts(cartId).size()==0){
-            System.out.println("Cart is empty");
-        }
-        else {
-            System.out.println("Stock             Product                Price");
-            System.out.println("__________________________________________________");
-            for (Product p : storeManager.getCartProducts(cartId).keySet()) {
+        boolean isCartEmpty = true;
 
+        System.out.println("Stock             Product                Price");
+        System.out.println("__________________________________________________");
+        for (Product p : storeManager.getCartProducts(cartId).keySet()) {
+
+            if (storeManager.getCartProducts(cartId).get(p)>0){
+                isCartEmpty = false;
                 name = p.getName();
                 stock = String.valueOf(storeManager.getCartProducts(cartId).get(p));
                 price = String.valueOf(p.getPrice());
@@ -243,8 +243,12 @@ public class StoreView {
                         (25 - name.length() + price.length()) + "s", stock, name, price);
 
                 System.out.println(printMsg);
-
             }
+
+        }
+
+        if (isCartEmpty){
+            System.out.println("Cart is empty");
         }
     }
 }
