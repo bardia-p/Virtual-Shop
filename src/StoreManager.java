@@ -46,15 +46,6 @@ public class StoreManager {
         carts = new HashMap<>();
     }
 
-
-    /**
-     * Returns the main inventory for the store
-     * @return the  inventory of the store
-     */
-    public Inventory getInventory() {
-        return inv;
-    }
-
     /**
      * Checks the number of stocks available of a given product given its object
      * @param product the prodcut to check its stock for
@@ -69,10 +60,11 @@ public class StoreManager {
 
     /**
      * Takes a 2D array of orders in the form of [[product1, number1],...]] and applies the transaction
-     * @param cart cart that needs to be checked out
+     * @param cartId cart that needs to be checked out
      * @return the total cost of the transaction (-1 if it was not successful)
      */
-    public double checkout(ShoppingCart cart){
+    public double checkout(int cartId){
+        ShoppingCart cart = carts.get(cartId);
         double total = 0;
         HashMap<Product, Integer> orders= cart.getProducts();
 
@@ -120,11 +112,93 @@ public class StoreManager {
     }
 
     /**
-     * Returns the cart for a given id
-     * @param id the id for the cart to retrieve
-     * @return the cart
+     * Returns all the current products in a ShoppingCart
+     * @param cartId the id of the cart to get products from
+     * @return the products of the cart
      */
-    public ShoppingCart getCart(int id){
-        return carts.get(id);
+    public HashMap<Product, Integer> getCartProducts (int cartId){
+        return carts.get(cartId).getProducts();
+    }
+
+    /**
+     * Returns the total price in the cart
+     * @param id the id of the cart
+     * @return the total price of the cart
+     */
+    public double getCartTotalPrice(int id){
+        return carts.get(id).getTotalPrice();
+    }
+
+    /**
+     * Adds a certain amount of a product to the cart
+     * @param product the name of the product to add to the cart
+     * @param amount the amount of the product to remove from the cart
+     * @param cartId the id of the cart to remove products from
+     * @return true if the add process was successful
+     */
+    public boolean addToCart(String product, int amount, int cartId) {
+        Product p = findProduct(product, cartId);
+        ShoppingCart cart = carts.get(cartId);
+        if (p!=null && amount<=inv.getStock(p.getId()) && amount>0){
+            if (inv.removeStock(p, amount)) {
+                cart.addStock(p, amount);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Removes an item from the cart and its amount
+     * @param product the name of the product to be removed
+     * @param amount the amount of the product to remove
+     * @param cartId the id of the cart to remove products from
+     * @return true if the removal process was sucessful
+     */
+    public boolean removeFromCart(String product, int amount, int cartId) {
+        Product p = findProduct(product, cartId);
+        ShoppingCart cart = carts.get(cartId);
+        if (p!=null && amount<=cart.getStock(p.getId()) && amount>0){
+            if (carts.get(cartId).removeStock(p, amount)){
+                inv.addStock(p, amount);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Empties the cart and removes all of its items in cases the user quits
+     * @param cartId the id of the carts to empty
+     */
+    public void emptyCart(int cartId){
+        ShoppingCart cart = carts.get(cartId);
+        for (Product p: cart.getProducts().keySet()){
+            removeFromCart(p.getName(), cart.getProducts().get(p), cartId);
+        }
+
+        cart.getProducts().clear();
+    }
+
+    /**
+     * Find the product item given its name
+     * @param product the name of the product
+     * @param cartId the id of the cart to look for the product for
+     * @return the item of the product
+     */
+    private Product findProduct (String product, int cartId){
+        //checks for the product in the inventory
+        for (Product p: getAvailableProducts()){
+            if (p.getName().equals(product)){
+                return p;
+            }
+        }
+        //checks for the product in the cart (in case the ordered all of something)
+        for (Product p: getCartProducts(cartId).keySet()){
+            if (p.getName().equals(product)){
+                return p;
+            }
+        }
+        return null;
     }
 }

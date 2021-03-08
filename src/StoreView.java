@@ -98,7 +98,7 @@ public class StoreView {
         input = "";
         System.out.println("--------Guy and Bardia, Pie and Media--------");
         System.out.println("Type 'help' for a list of commands");
-        System.out.println("CART>>>"+storeManager.getCart(cartId).getTotalPrice());
+        System.out.println("CART>>>"+storeManager.getCartTotalPrice(cartId));
         System.out.println("Enter a new command");
         input = sc.nextLine().toLowerCase();
 
@@ -120,7 +120,7 @@ public class StoreView {
 
         // Checks out the user
         else if (input.equals("checkout")){
-            storeManager.checkout(storeManager.getCart(cartId));
+            storeManager.checkout(cartId);
             return false;
         }
 
@@ -135,7 +135,7 @@ public class StoreView {
                 amount = Integer.parseInt(sc.nextLine());
 
                 // Makes sure the product and its stock exist in the inventory
-                while (!addToCart(product, amount)) {
+                while (!storeManager.addToCart(product, amount, cartId)) {
                     System.out.println("Invalid product name or amount");
                     System.out.println("Enter the name of the product (type 'back' to exit this mode)");
                     product = sc.nextLine().toLowerCase();
@@ -148,7 +148,7 @@ public class StoreView {
                     amount = Integer.parseInt(sc.nextLine());
                 }
             }
-            System.out.println("CART>>>"+storeManager.getCart(cartId).getTotalPrice());
+            System.out.println("CART>>>"+storeManager.getCartTotalPrice(cartId));
             return true;
         }
 
@@ -156,13 +156,13 @@ public class StoreView {
         else if (input.equals("removefromcart")){
             System.out.println("--------------REMOVE--------------");
             displayCart();
-            if (storeManager.getCart(cartId).getProducts().size()!=0) {
+            if (storeManager.getCartProducts(cartId).size()!=0) {
                 System.out.println("Enter the name of the product (type 'back' to exit this mode)");
                 product = sc.nextLine().toLowerCase();
                 if (!product.equals("back")) {
                     System.out.println("Enter the amount");
                     amount = Integer.parseInt(sc.nextLine());
-                    while (!removeFromCart(product, amount)) {
+                    while (!storeManager.removeFromCart(product, amount, cartId)) {
                         System.out.println("Invalid product name or amount");
                         System.out.println("Enter the name of the product (type 'back' to exit this mode)");
                         product = sc.nextLine().toLowerCase();
@@ -175,15 +175,15 @@ public class StoreView {
                         amount = Integer.parseInt(sc.nextLine());
                     }
                 }
-                System.out.println("CART>>>" + storeManager.getCart(cartId).getTotalPrice());
+                System.out.println("CART>>>" + storeManager.getCartTotalPrice(cartId));
             }
             return true;
         }
 
         // quits the user
         else if (input.equals("quit")){
-            emptyCart();
-            storeManager.checkout(storeManager.getCart(cartId));
+            storeManager.emptyCart(cartId);
+            storeManager.checkout(cartId);
             return false;
         }
 
@@ -227,16 +227,16 @@ public class StoreView {
         String price;
         String printMsg;
 
-        if (storeManager.getCart(cartId).getProducts().size()==0){
+        if (storeManager.getCartProducts(cartId).size()==0){
             System.out.println("Cart is empty");
         }
         else {
             System.out.println("Stock             Product                Price");
             System.out.println("__________________________________________________");
-            for (Product p : storeManager.getCart(cartId).getProducts().keySet()) {
+            for (Product p : storeManager.getCartProducts(cartId).keySet()) {
 
                 name = p.getName();
-                stock = String.valueOf(storeManager.getCart(cartId).getProducts().get(p));
+                stock = String.valueOf(storeManager.getCartProducts(cartId).get(p));
                 price = String.valueOf(p.getPrice());
 
                 printMsg = String.format("%s" + "%" + (15 - stock.length() + name.length()) + "s" + "%" +
@@ -246,65 +246,5 @@ public class StoreView {
 
             }
         }
-    }
-
-    /**
-     * Find the product item given its name
-     * @param product the name of the product
-     * @return the item of the product
-     */
-    private Product findProduct (String product){
-        for (Product p: storeManager.getAvailableProducts()){
-            if (p.getName().equals(product)){
-                return p;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Adds a certain amount of a product to the cart
-     * @param product the name of the product to add to the cart
-     * @param amount the amount of the product to remove from the cart
-     * @return true if the add process was successful
-     */
-    public boolean addToCart(String product, int amount) {
-        Product p = findProduct(product);
-        if (p!=null && amount<=storeManager.getInventory().getStock(p.getId()) && amount>0){
-            if (storeManager.getInventory().removeStock(p, amount)) {
-                storeManager.getCart(cartId).addStock(p, amount);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Removes an item from the cart and its amount
-     * @param product the name of the product to be removed
-     * @param amount the amount of the product to remove
-     * @return true if the removal process was sucessful
-     */
-    public boolean removeFromCart(String product, int amount) {
-        Product p = findProduct(product);
-        if (p!=null && amount<=storeManager.getCart(cartId).getStock(p.getId()) && amount>0){
-            if (storeManager.getCart(cartId).removeStock(p, amount)){
-                storeManager.getInventory().addStock(p, amount);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Empties the cart and removes all of its items in cases theuser quits
-     */
-    public void emptyCart(){
-        for (Product p: storeManager.getCart(cartId).getProducts().keySet()){
-            removeFromCart(p.getName(), storeManager.getCart(cartId).getProducts().get(p));
-        }
-
-        storeManager.getCart(cartId).getProducts().clear();
-
     }
 }
