@@ -56,6 +56,15 @@ public class StoreView {
         while (activeSV>0){
             System.out.printf("Number of actve users: %d\n",activeSV);
             System.out.println("CHOOSE YOUR STOREVIEW>>>");
+            String availableStores = "THE AVAILABLE STOREVIEWS ARE: ";
+
+            for (int i = 0; i <customers.length; i++){
+                if (customers[i]!=null){
+                    availableStores+=i+" ";
+                }
+            }
+            System.out.println(availableStores);
+
             int storeId = Integer.parseInt(sc.nextLine());
 
             // Checks to see if the entered storeview is within the given range
@@ -98,7 +107,7 @@ public class StoreView {
         input = "";
         System.out.println("--------Guy and Bardia, Pie and Media--------");
         System.out.println("Type 'help' for a list of commands");
-        System.out.println("CART>>>"+storeManager.getCartTotalPrice(cartId));
+        System.out.printf("CART>>> $%.2f\n", storeManager.getCartTotalPrice(cartId));
         System.out.println("Enter a new command");
         input = sc.nextLine().toLowerCase();
 
@@ -148,7 +157,7 @@ public class StoreView {
                     amount = Integer.parseInt(sc.nextLine());
                 }
             }
-            System.out.println("CART>>>"+storeManager.getCartTotalPrice(cartId));
+            System.out.printf("CART>>> $%.2f\n", storeManager.getCartTotalPrice(cartId));
             return true;
         }
 
@@ -175,7 +184,7 @@ public class StoreView {
                         amount = Integer.parseInt(sc.nextLine());
                     }
                 }
-                System.out.println("CART>>>" + storeManager.getCartTotalPrice(cartId));
+                System.out.printf("CART>>> $%.2f\n", storeManager.getCartTotalPrice(cartId));
             }
             return true;
         }

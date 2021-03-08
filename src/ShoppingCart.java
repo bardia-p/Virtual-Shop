@@ -50,7 +50,7 @@ public class ShoppingCart extends Inventory {
         for (Product product: orders.keySet()){
             total +=product.getPrice()*orders.get(product);
         }
-        return Math.round(total);
+        return total;
     }
 
 }

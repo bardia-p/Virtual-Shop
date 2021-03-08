@@ -82,7 +82,7 @@ public class StoreManager {
 
         // Making the cart available again
         carts.remove(cart.getId());
-        return Math.round(total);
+        return total;
     }
 
     /**
