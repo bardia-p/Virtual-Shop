@@ -1,6 +1,8 @@
 //Bardia Parmoun 101143006
 //Guy Morgenshtern 101151430
 
+package store;
+
 import java.util.HashMap;
 
 /**
@@ -23,7 +25,7 @@ public class Inventory{
      * creates default products
      */
     public Inventory(){
-        this.products = new HashMap<>();
+        this(new HashMap<>());
         initializeInventory();
     }
 
@@ -95,11 +97,13 @@ public class Inventory{
      */
     public int getStock (int id) {
         Product product = findProduct(id) ;
-        if (product!=null) {
+        try{
             return products.get(product);
         }
-        //product does not exist
-        return -1;
+        catch(NullPointerException e){
+            //product does not exist
+            return -1;
+        }
     }
 
     /**
@@ -108,7 +112,6 @@ public class Inventory{
      * @param newStock the number of stocks to add to the given products
      */
     public void addStock (Product product, int newStock) {
-
         // If the product already exists it adds to the existing value
         if (getStock(product.getId()) != -1) {
             products.put(product, products.get(product) + newStock);
@@ -127,7 +130,6 @@ public class Inventory{
      * @return boolean if removeStock was successful
      */
     public boolean removeStock (Product product, int newStock){
-
         // If the product already exists it removes from the existing values
         if (getStock(product.getId())!=-1) {
             if (products.get(product)-newStock>=0){

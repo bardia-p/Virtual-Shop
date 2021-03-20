@@ -1,6 +1,8 @@
 //Bardia Parmoun 101143006
 //Guy Morgenshtern 101151430
 
+package store;
+
 /**
  * This class defines the basic type of the store which is a product. The attributes of
  * a product are final and cann be changed

@@ -1,6 +1,8 @@
 //Bardia Parmoun 101143006
 //Guy Morgenshtern 101151430
 
+package store;
+
 import java.util.HashMap;
 import java.util.ArrayList;
 
@@ -21,12 +23,12 @@ public class StoreManager {
     /**
      * an id counter used to assign each cart a new id
      */
-    private static int id_counter = 0;
+    private static int idCounter = 0;
 
     /**
      * An array used to keep track of the all the carts
      */
-    private HashMap<Integer,ShoppingCart> carts ;
+    private HashMap<Integer, ShoppingCart> carts ;
 
 
     /**
@@ -68,7 +70,6 @@ public class StoreManager {
         double total = 0;
         HashMap<Product, Integer> orders= cart.getProducts();
 
-
         // Proceeds to calculate cost of the order and removing it from the stock
         for (Product product: orders.keySet()){
             System.out.printf("%s: %d = $%.2f\n", product.getName(), orders.get(product),
@@ -90,7 +91,7 @@ public class StoreManager {
      * @return the generated cart id
      */
     public int assignNewCartID(){
-        int newId = id_counter++;
+        int newId = idCounter++;
         carts.put(newId, new ShoppingCart(newId));
         return newId;
     }
@@ -139,11 +140,15 @@ public class StoreManager {
     public boolean addToCart(String product, int amount, int cartId) {
         Product p = findProduct(product, cartId);
         ShoppingCart cart = carts.get(cartId);
-        if (p!=null && amount<=inv.getStock(p.getId()) && amount>0){
-            if (inv.removeStock(p, amount)) {
-                cart.addStock(p, amount);
-                return true;
+        try {
+            if (amount <= inv.getStock(p.getId()) && amount > 0) {
+                if (inv.removeStock(p, amount)) {
+                    cart.addStock(p, amount);
+                    return true;
+                }
             }
+        }
+        catch (NullPointerException e){
         }
         return false;
     }
@@ -158,11 +163,15 @@ public class StoreManager {
     public boolean removeFromCart(String product, int amount, int cartId) {
         Product p = findProduct(product, cartId);
         ShoppingCart cart = carts.get(cartId);
-        if (p!=null && amount<=cart.getStock(p.getId()) && amount>0){
-            if (carts.get(cartId).removeStock(p, amount)){
-                inv.addStock(p, amount);
-                return true;
+        try {
+            if (amount <= cart.getStock(p.getId()) && amount > 0) {
+                if (carts.get(cartId).removeStock(p, amount)) {
+                    inv.addStock(p, amount);
+                    return true;
+                }
             }
+        }
+        catch (NullPointerException e){
         }
         return false;
     }

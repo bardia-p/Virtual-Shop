@@ -1,8 +1,9 @@
 //Bardia Parmoun 101143006
 //Guy Morgenshtern 101151430
 
-import java.util.Scanner;
+package store;
 
+import java.util.Scanner;
 
 /**
  * The class that assigns each user a store view and keeps track of all the storeviews
@@ -41,54 +42,61 @@ public class StoreView {
         // The number of allowed active users
         int activeSV = 3;
 
-
         StoreView[] customers = new StoreView[activeSV];
 
         for (int i=0; i<activeSV; i++){
             customers[i] = new StoreView(sm, sm.assignNewCartID());
         }
 
-
         Scanner sc = new Scanner(System.in);
 
         // Keeps track of all the active users
 
-        while (activeSV>0){
-            System.out.printf("Number of actve users: %d\n",activeSV);
+        while (activeSV>0) {
+            System.out.printf("Number of actve users: %d\n", activeSV);
             System.out.println("CHOOSE YOUR STOREVIEW>>>");
             String availableStores = "THE AVAILABLE STOREVIEWS ARE: ";
 
-            for (int i = 0; i <customers.length; i++){
-                if (customers[i]!=null){
-                    availableStores+=i+" ";
+            for (int i = 0; i < customers.length; i++) {
+                if (customers[i] != null) {
+                    availableStores += i + " ";
                 }
             }
             System.out.println(availableStores);
 
-            int storeId = Integer.parseInt(sc.nextLine());
+            try {
+                int storeId = Integer.parseInt(sc.nextLine());
 
-            // Checks to see if the entered storeview is within the given range
-            if (storeId >= 0 && storeId <customers.length){
-                // Checks to see if the storeview is available
-                if (customers[storeId]!=null){
-                    String userChoice = "n";
-                    while (!userChoice.equals("y")){
-                        if (!customers[storeId].displayGUI()) {
-                            customers[storeId] = null;
-                            activeSV--;
-                            break;
-                        }
-                        System.out.print("GO TO ANOTHER STOREVIEW? (y) >>> ");
-                        userChoice = sc.nextLine().toLowerCase();
+                String userChoice = "n";
+                while (!userChoice.equals("y")) {
+                    if (!customers[storeId].displayGUI()) {
+                        customers[storeId] = null;
+                        activeSV--;
+                        break;
                     }
-
-                } else{
-                    System.out.println("MAIN > ERROR > BAD CHOICE\nTHAT STOREVIEW WAS DEACTIVATED");
+                    System.out.print("GO TO ANOTHER STOREVIEW? (y) >>> ");
+                    userChoice = sc.nextLine().toLowerCase();
                 }
-            } else{
-                System.out.println( String.format("MAIN > ERROR > BAD CHOICE\nPLEASE CHOOSE IN RANGE [%d, %d]", 0, customers.length - 1) );
+            }
+
+            // If the storeview is not available
+            catch (NullPointerException e){
+                System.out.println("MAIN > ERROR > BAD CHOICE\nTHAT STOREVIEW WAS DEACTIVATED");
+            }
+
+            // If the entered storeview is within the given range
+            catch (ArrayIndexOutOfBoundsException e) {
+                System.out.println(String.format("MAIN > ERROR > BAD CHOICE\nPLEASE CHOOSE IN RANGE [%d, %d]", 0, customers.length - 1));
+            }
+
+            // If the input is not integer
+
+            catch (NumberFormatException e){
+                System.out.println("MAIN > ERROR > BAD CHOICE");
+                System.out.println("Input must be an integer value");
             }
         }
+
         System.out.println("ALL STOREVIEWS DEACTIVATED");
     }
 
@@ -99,12 +107,7 @@ public class StoreView {
     public boolean displayGUI(){
         Scanner sc = new Scanner(System.in);
         String input;
-        String product;
-        int amount;
 
-
-
-        input = "";
         System.out.println("--------Guy and Bardia, Pie and Media--------");
         System.out.println("Type 'help' for a list of commands");
         System.out.printf("CART>>> $%.2f\n", storeManager.getCartTotalPrice(cartId));
@@ -137,27 +140,7 @@ public class StoreView {
         else if (input.equals("addtocart")){
             System.out.println("-------------ADD--------------");
             displayItems();
-            System.out.println("Enter the name of the product (type 'back' to exit this mode)");
-            product = sc.nextLine().toLowerCase();
-            if (!product.equals("back")) {
-                System.out.println("Enter the amount");
-                amount = Integer.parseInt(sc.nextLine());
-
-                // Makes sure the product and its stock exist in the inventory
-                while (!storeManager.addToCart(product, amount, cartId)) {
-                    System.out.println("Invalid product name or amount");
-                    System.out.println("Enter the name of the product (type 'back' to exit this mode)");
-                    product = sc.nextLine().toLowerCase();
-
-                    if (product.equals("back")) {
-                        break;
-                    }
-
-                    System.out.println("Enter the amount");
-                    amount = Integer.parseInt(sc.nextLine());
-                }
-            }
-            System.out.printf("CART>>> $%.2f\n", storeManager.getCartTotalPrice(cartId));
+            addToCartUI();
             return true;
         }
 
@@ -165,27 +148,7 @@ public class StoreView {
         else if (input.equals("removefromcart")){
             System.out.println("--------------REMOVE--------------");
             displayCart();
-            if (storeManager.getCartProducts(cartId).size()!=0) {
-                System.out.println("Enter the name of the product (type 'back' to exit this mode)");
-                product = sc.nextLine().toLowerCase();
-                if (!product.equals("back")) {
-                    System.out.println("Enter the amount");
-                    amount = Integer.parseInt(sc.nextLine());
-                    while (!storeManager.removeFromCart(product, amount, cartId)) {
-                        System.out.println("Invalid product name or amount");
-                        System.out.println("Enter the name of the product (type 'back' to exit this mode)");
-                        product = sc.nextLine().toLowerCase();
-
-                        if (product.equals("back")) {
-                            break;
-                        }
-
-                        System.out.println("Enter the amount");
-                        amount = Integer.parseInt(sc.nextLine());
-                    }
-                }
-                System.out.printf("CART>>> $%.2f\n", storeManager.getCartTotalPrice(cartId));
-            }
+            removeFromCartUI();
             return true;
         }
 
@@ -196,10 +159,122 @@ public class StoreView {
             return false;
         }
 
+        // command does not exist
         else{
             System.out.println("Invalid command was entered");
             return true;
         }
+    }
+
+    /**
+     * Displays the removefromcart interface where the user is prompted to choose a product and a proper amount which
+     * is then removed from the cart
+     */
+    private void removeFromCartUI(){
+        Scanner sc = new Scanner(System.in);
+        String product;
+        int amount;
+
+        if (storeManager.getCartProducts(cartId).size()!=0) {
+            System.out.println("Enter the name of the product (type 'back' to exit this mode)");
+            product = sc.nextLine().toLowerCase();
+            if (!product.equals("back")) {
+                System.out.println("Enter the amount");
+                try {
+                    amount = Integer.parseInt(sc.nextLine());
+                }
+                catch (NumberFormatException e){
+                    System.out.println("REMOVEFROMCART > ERROR > BAD CHOICE");
+                    System.out.println("Input must be an integer value");
+                    amount = -1;
+                }
+
+                // Makes sure the product and its stock exist in the cart
+                int numTries = 2;
+                while (!storeManager.removeFromCart(product, amount, cartId)) {
+                    if (numTries==0){
+                        System.out.println("You ran out of tries");
+                        break;
+                    }
+                    System.out.println("Invalid product name or amount");
+                    System.out.printf("You have %d tries left\n", numTries);
+
+                    System.out.println("Enter the name of the product (type 'back' to exit this mode)");
+                    product = sc.nextLine().toLowerCase();
+
+                    if (product.equals("back")) {
+                        break;
+                    }
+
+                    System.out.println("Enter the amount");
+
+                    try {
+                        amount = Integer.parseInt(sc.nextLine());
+                    }
+                    catch (NumberFormatException  e){
+                        System.out.println("REMOVEFROMCART > ERROR > BAD CHOICE");
+                        System.out.println("Input must be an integer value");
+                    }
+
+                    numTries--;
+                }
+            }
+            System.out.printf("CART>>> $%.2f\n", storeManager.getCartTotalPrice(cartId));
+        }
+    }
+
+    /**
+     * Displays the addToCart interface where the user is prompted to choose a product and a proper amount which is then
+     * added to the cart
+     */
+    public void addToCartUI(){
+        Scanner sc = new Scanner(System.in);
+        String product;
+        int amount;
+
+        System.out.println("Enter the name of the product (type 'back' to exit this mode)");
+        product = sc.nextLine().toLowerCase();
+        if (!product.equals("back")) {
+            System.out.println("Enter the amount");
+
+            try {
+                amount = Integer.parseInt(sc.nextLine());
+            }
+            catch (NumberFormatException e){
+                System.out.println("ADDTOCART > ERROR > BAD CHOICE");
+                System.out.println("Input must be an integer value");
+                amount = -1;
+            }
+
+            // Makes sure the product and its stock exist in the inventory
+            int numTries = 2;
+            while (!storeManager.addToCart(product, amount, cartId)) {
+                if (numTries==0){
+                    System.out.println("You ran out of tries");
+                    break;
+                }
+                System.out.println("Invalid product name or amount");
+                System.out.printf("You have %d tries left\n", numTries);
+
+                System.out.println("Enter the name of the product (type 'back' to exit this mode)");
+                product = sc.nextLine().toLowerCase();
+
+                if (product.equals("back")) {
+                    break;
+                }
+
+                System.out.println("Enter the amount");
+
+                try {
+                    amount = Integer.parseInt(sc.nextLine());
+                }
+                catch (NumberFormatException e){
+                    System.out.println("ADDTOCART > ERROR > BAD CHOICE");
+                    System.out.println("Input must be an integer value");
+                }
+            }
+        }
+        System.out.printf("CART>>> $%.2f\n", storeManager.getCartTotalPrice(cartId));
     }
 
     /**
@@ -214,7 +289,6 @@ public class StoreView {
         System.out.println("Stock             Product                Price");
         System.out.println("__________________________________________________");
         for (int i = 0; i < storeManager.getAvailableProducts().size(); i++) {
-
             name = storeManager.getAvailableProducts().get(i).getName();
             stock = String.valueOf(storeManager.checkStock(storeManager.getAvailableProducts().get(i)));
             price = String.valueOf(storeManager.getAvailableProducts().get(i).getPrice());
@@ -223,7 +297,6 @@ public class StoreView {
                     (25 - name.length() + price.length()) + "s", stock,name, price);
 
             System.out.println(printMsg);
-
         }
     }
 
@@ -241,7 +314,6 @@ public class StoreView {
         System.out.println("Stock             Product                Price");
         System.out.println("__________________________________________________");
         for (Product p : storeManager.getCartProducts(cartId).keySet()) {
-
             if (storeManager.getCartProducts(cartId).get(p)>0){
                 isCartEmpty = false;
                 name = p.getName();
@@ -253,7 +325,6 @@ public class StoreView {
 
                 System.out.println(printMsg);
             }
-
         }
 
         if (isCartEmpty){
