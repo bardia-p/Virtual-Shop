@@ -148,15 +148,11 @@ public class StoreManager {
     public boolean addToCart(String product, int amount, int cartId) {
         Product p = findProduct(product, cartId);
         ShoppingCart cart = carts.get(cartId);
-        try {
-            if (amount <= inv.getStock(p.getId()) && amount > 0) {
-                if (inv.removeStock(p, amount)) {
-                    cart.addStock(p, amount);
-                    return true;
-                }
+        if (p!=null && amount <= inv.getStock(p.getId()) && amount > 0) {
+            if (inv.removeStock(p, amount)) {
+                cart.addStock(p, amount);
+                return true;
             }
-        }
-        catch (NullPointerException e){
         }
         return false;
     }
@@ -171,15 +167,14 @@ public class StoreManager {
     public boolean removeFromCart(String product, int amount, int cartId) {
         Product p = findProduct(product, cartId);
         ShoppingCart cart = carts.get(cartId);
-        try {
-            if (amount <= cart.getStock(p.getId()) && amount > 0) {
-                if (carts.get(cartId).removeStock(p, amount)) {
-                    inv.addStock(p, amount);
-                    return true;
+        if (p!=null && amount <= cart.getStock(p.getId()) && amount > 0) {
+            if (carts.get(cartId).removeStock(p, amount)) {
+                inv.addStock(p, amount);
+                if (getCartProducts(cartId).get(p)==0){
+                    getCartProducts(cartId).remove(p);
                 }
+                return true;
             }
-        }
-        catch (NullPointerException e){
         }
         return false;
     }

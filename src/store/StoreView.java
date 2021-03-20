@@ -75,7 +75,13 @@ public class StoreView {
                         break;
                     }
                     System.out.print("GO TO ANOTHER STOREVIEW? (y) >>> ");
-                    userChoice = sc.nextLine().toLowerCase();
+                    try {
+                        userChoice = sc.nextLine().toLowerCase();
+                    }
+                    catch (Exception e){
+                        System.out.println("MAIN > ERROR > BAD INPUT");
+                        userChoice = "N";
+                    }
                 }
             }
 
@@ -86,7 +92,8 @@ public class StoreView {
 
             // If the entered storeview is within the given range
             catch (ArrayIndexOutOfBoundsException e) {
-                System.out.println(String.format("MAIN > ERROR > BAD CHOICE\nPLEASE CHOOSE IN RANGE [%d, %d]", 0, customers.length - 1));
+                System.out.println(String.format("MAIN > ERROR > BAD CHOICE\nPLEASE CHOOSE IN RANGE [%d, %d]",
+                        0, customers.length - 1));
             }
 
             // If the input is not integer
@@ -112,7 +119,14 @@ public class StoreView {
         System.out.println("Type 'help' for a list of commands");
         System.out.printf("CART>>> $%.2f\n", storeManager.getCartTotalPrice(cartId));
         System.out.println("Enter a new command");
-        input = sc.nextLine().toLowerCase();
+
+        try {
+            input = sc.nextLine().toLowerCase();
+        }
+        catch (Exception e){
+            System.out.println("STOREVIEW > ERROR > BAD INPUT");
+            return false;
+        }
 
         // Displays the possible commands that can be entered
         if (input.equals("help")){
@@ -177,7 +191,14 @@ public class StoreView {
 
         if (storeManager.getCartProducts(cartId).size()!=0) {
             System.out.println("Enter the name of the product (type 'back' to exit this mode)");
-            product = sc.nextLine().toLowerCase();
+            try {
+                product = sc.nextLine().toLowerCase();
+            }
+            catch (Exception e){
+                System.out.println("REMOVEFROMCART > ERROR > BAD INPUT");
+                product = "";
+            }
+
             if (!product.equals("back")) {
                 System.out.println("Enter the amount");
                 try {
@@ -200,7 +221,14 @@ public class StoreView {
                     System.out.printf("You have %d tries left\n", numTries);
 
                     System.out.println("Enter the name of the product (type 'back' to exit this mode)");
-                    product = sc.nextLine().toLowerCase();
+
+                    try {
+                        product = sc.nextLine().toLowerCase();
+                    }
+                    catch (Exception e){
+                        System.out.println("REMOVEFROMCART > ERROR > BAD INPUT");
+                        product = "";
+                    }
 
                     if (product.equals("back")) {
                         break;
@@ -233,7 +261,14 @@ public class StoreView {
         int amount;
 
         System.out.println("Enter the name of the product (type 'back' to exit this mode)");
-        product = sc.nextLine().toLowerCase();
+        try {
+            product = sc.nextLine().toLowerCase();
+        }
+        catch (Exception e){
+            System.out.println("ADDTOCART > ERROR > BAD INPUT");
+            product = "";
+        }
+
         if (!product.equals("back")) {
             System.out.println("Enter the amount");
 
@@ -257,7 +292,13 @@ public class StoreView {
                 System.out.printf("You have %d tries left\n", numTries);
 
                 System.out.println("Enter the name of the product (type 'back' to exit this mode)");
-                product = sc.nextLine().toLowerCase();
+                try {
+                    product = sc.nextLine().toLowerCase();
+                }
+                catch (Exception e){
+                    System.out.println("ADDTOCART > ERROR > BAD INPUT");
+                    product = "";
+                }
 
                 if (product.equals("back")) {
                     break;
