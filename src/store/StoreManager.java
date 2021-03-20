@@ -113,6 +113,14 @@ public class StoreManager {
     }
 
     /**
+     * Returns the products that are in the inventory
+     * @return the products in inventory
+     */
+    public HashMap<Product, Integer> getInventoryProducts(){
+        return inv.getProducts();
+    }
+
+    /**
      * Returns all the current products in a ShoppingCart
      * @param cartId the id of the cart to get products from
      * @return the products of the cart
