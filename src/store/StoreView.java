@@ -146,7 +146,12 @@ public class StoreView {
 
         // Checks out the user
         else if (input.equals("checkout")){
-            storeManager.checkout(cartId);
+            for (Product product: storeManager.getCartProducts(cartId).keySet()){
+                int amount = storeManager.getCartProducts(cartId).get(product);
+                System.out.printf("%s: %d = $%.2f\n", product.getName(), amount, product.getPrice()*amount);
+            }
+
+            System.out.printf("%s = $%.2f\n", "Total", storeManager.checkout(cartId));
             return false;
         }
 
@@ -169,7 +174,7 @@ public class StoreView {
         // quits the user
         else if (input.equals("quit")){
             storeManager.emptyCart(cartId);
-            storeManager.checkout(cartId);
+            System.out.printf("%s = $%.2f\n", "Total", storeManager.checkout(cartId));
             return false;
         }
 

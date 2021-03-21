@@ -72,14 +72,9 @@ public class StoreManager {
 
         // Proceeds to calculate cost of the order and removing it from the stock
         for (Product product: orders.keySet()){
-            System.out.printf("%s: %d = $%.2f\n", product.getName(), orders.get(product),
-                    product.getPrice()*orders.get(product));
-
             total +=product.getPrice()*orders.get(product);
             orders.remove(product);
         }
-
-        System.out.printf("%s = $%.2f\n", "Total", total);
 
         // Making the cart available again
         carts.remove(cart.getId());
@@ -112,13 +107,6 @@ public class StoreManager {
         return availableProducts;
     }
 
-    /**
-     * Returns the products that are in the inventory
-     * @return the products in inventory
-     */
-    public HashMap<Product, Integer> getInventoryProducts(){
-        return inv.getProducts();
-    }
 
     /**
      * Returns all the current products in a ShoppingCart
@@ -126,7 +114,10 @@ public class StoreManager {
      * @return the products of the cart
      */
     public HashMap<Product, Integer> getCartProducts (int cartId){
-        return carts.get(cartId).getProducts();
+        if (carts.get(cartId)!=null) {
+            return carts.get(cartId).getProducts();
+        }
+        return null;
     }
 
     /**
