@@ -8,8 +8,8 @@ import java.util.HashMap;
 /**
  * Inventory class: Holds an inventory of available products and stock
  * @author Bardia Parmoun 101143006
- * @version 2.0
- * @date 2020/02/27
+ * @version 3.0
+ * @date 2020/03/21
  */
 
 public class Inventory{

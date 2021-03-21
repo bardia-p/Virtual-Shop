@@ -1,6 +1,8 @@
+//Bardia Parmoun 101143006
+//Guy Morgenshtern 101151430
+
 package storetest;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,17 +13,25 @@ import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
+/**
+ * The class used to test the Inventory class
+ * @author Guy Morgenshtern 101151430
+ * @version 2.0
+ * @date 2020/03/21
+ */
+
 class InventoryTest {
 
     /**
      * Inventory object to be tested
      */
-    static private Inventory inv;
+    private static Inventory inv;
 
     /**
      * Product and stock list to keep track on items being added during testing
      */
-    static private HashMap<Product, Integer> initialProducts;
+    private static HashMap<Product, Integer> initialProducts;
 
     /**
      * product ID that is never used in test
@@ -33,7 +43,7 @@ class InventoryTest {
      * reinitializing test variables for each test case
      */
     @BeforeEach
-    void setUp() {
+    public void setUp() {
          //setting up initial products for testGet methods
          initialProducts = new HashMap<>();
          initialProducts.put(new Product("Apple Pie", 1, 9.99), 10);
@@ -43,14 +53,13 @@ class InventoryTest {
 
          //creating test inv with initial products
          inv = new Inventory(initialProducts);
-
     }
 
     /**
      * Notify that test has finished after each test
      */
     @AfterEach
-    void tearDown() {
+    public void tearDown() {
         System.out.println("Test has finished");
     }
 
@@ -58,7 +67,7 @@ class InventoryTest {
      * Testing get product info for a product that doesn't exist
      */
     @Test
-    void testGetProductInfoProductDoesntExists() {
+    public void testGetProductInfoProductDoesntExists() {
 
         //testing getProductInfo with ID that does not exist
         assertEquals(null, inv.getProductInfo(invalidID), "getProductInfo did not output required value");
@@ -68,7 +77,7 @@ class InventoryTest {
      * Testing get product info for a product exist
      */
     @Test
-    void testGetProductInfoProductExists() {
+    public void testGetProductInfoProductExists() {
 
         //checks that proper item is returned from inventory
         for (Product p: initialProducts.keySet()) {
@@ -80,7 +89,7 @@ class InventoryTest {
      * Testing get stock for a product that doesn't exist
      */
     @Test
-    void testGetStockNoProductExists() {
+    public void testGetStockNoProductExists() {
 
         //expects "-1" for stock of an invalid product
         assertEquals(-1, inv.getStock(invalidID), "getStock did not output required value");
@@ -90,7 +99,7 @@ class InventoryTest {
      * Testing get stock for a product that exists
      */
     @Test
-    void testGetStockProductExists() {
+    public void testGetStockProductExists() {
 
         //checks proper stock is being returned from inv
         for (Product p: initialProducts.keySet()) {
@@ -102,7 +111,7 @@ class InventoryTest {
      * Testing adding a negative stock
      */
     @Test
-    void testAddNegativeStock() {
+    public void testAddNegativeStock() {
 
         //adding a negative amount of stock ONLY to inventory, for each product in initialProducts
         for (Product p: initialProducts.keySet()) {
@@ -116,7 +125,7 @@ class InventoryTest {
      * Testing adding stock to a product that doesn't exist yet
      */
     @Test
-    void testAddStockNoProductExists() {
+    public void testAddStockNoProductExists() {
         Product newProduct = new Product("Barak Obama's Biography", 5, 10.99);
 
         //adding new product to inventory
@@ -129,14 +138,15 @@ class InventoryTest {
         assertEquals(10, inv.getStock(newProduct.getId()), "New product does not have correct stock");
 
         //assert size of inventory incremented by 1
-        assertEquals(initialProducts.size(), inv.getProducts().size(), "New product was not added to product HashMap in inventory");
+        assertEquals(initialProducts.size(), inv.getProducts().size(),
+                "New product was not added to product HashMap in inventory");
     }
 
     /**
      * testing add stock to a product that already exists
      */
     @Test
-    void testAddStockProductExists() {
+    public void testAddStockProductExists() {
 
         //add 10 to the stock of each initial product
         for (Product p: initialProducts.keySet()) {
@@ -151,13 +161,15 @@ class InventoryTest {
      * testing removing a negative amount of stock
      */
     @Test
-    void testRemoveNegativeStock() {
+    public void testRemoveNegativeStock() {
 
         //removing a negative amount of stock ONLY to inventory, for each product in initialProducts
         for (Product p: initialProducts.keySet()) {
-            assertEquals(false, inv.removeStock(p, -10), "removeStock did not output required value");
+            assertEquals(false, inv.removeStock(p, -10),
+                    "removeStock did not output required value");
             //asserting stock did not change
-            assertEquals(initialProducts.get(p), inv.getStock(p.getId()), "removeStock incorrectly changed the stock of product");
+            assertEquals(initialProducts.get(p), inv.getStock(p.getId()),
+                    "removeStock incorrectly changed the stock of product");
         }
     }
 
@@ -165,11 +177,12 @@ class InventoryTest {
      * testing removing stock from a product that doesn't exist
      */
     @Test
-    void testRemoveStockNoProductExists() {
+    public void testRemoveStockNoProductExists() {
         Product newProduct = new Product("Lego set", invalidID, 15.99);
 
         //assert correct output from function
-        assertEquals(false, inv.removeStock(newProduct, 10), "removeStock did not output required value");
+        assertEquals(false, inv.removeStock(newProduct, 10),
+                "removeStock did not output required value");
 
     }
 
@@ -177,13 +190,15 @@ class InventoryTest {
      * testing removing more stock than available from a product
      */
     @Test
-    void testRemoveTooMuchStock() {
+    public void testRemoveTooMuchStock() {
         for (Product p: initialProducts.keySet()) {
             //assert correct output
-            assertEquals(true, inv.removeStock(p, 1000),"removeStock did not output required value");
+            assertEquals(true, inv.removeStock(p, 1000),
+                    "removeStock did not output required value");
 
             //assert that product stock is not negative
-            assertEquals(0, inv.getStock(p.getId()), "removeStock incorrectly changed stock in inventory");
+            assertEquals(0, inv.getStock(p.getId()),
+                    "removeStock incorrectly changed stock in inventory");
         }
     }
 
@@ -191,12 +206,14 @@ class InventoryTest {
      * testing removing all available stock from a product
      */
     @Test
-    void testRemoveAllStockAvailable() {
+    public void testRemoveAllStockAvailable() {
         int productStock;
         for (Product p: initialProducts.keySet()) {
             productStock = initialProducts.get(p);
-            assertEquals(true, inv.removeStock(p, productStock), "removeStock did not output required value");
-            assertEquals(0, inv.getStock(p.getId()), "removeStock incorrectly changed stock in inventory");
+            assertEquals(true, inv.removeStock(p, productStock),
+                    "removeStock did not output required value");
+            assertEquals(0, inv.getStock(p.getId()),
+                    "removeStock incorrectly changed stock in inventory");
         }
     }
 
@@ -204,14 +221,15 @@ class InventoryTest {
      * testing removing 1 stock from an existing product
      */
     @Test
-    void testRemoveStockProductExists() {
+    public void testRemoveStockProductExists() {
         for (Product p: initialProducts.keySet()) {
 
             //assert method produces correct output
             assertEquals(true, inv.removeStock(p, 1));
 
             //assert that stock changes in inventory
-            assertEquals(initialProducts.get(p), inv.getStock(p.getId()),"removeStock incorrectly changed stock in inventory");
+            assertEquals(initialProducts.get(p), inv.getStock(p.getId()),
+                    "removeStock incorrectly changed stock in inventory");
         }
     }
 }

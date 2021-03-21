@@ -9,8 +9,8 @@ import java.util.Objects;
  * This class defines the basic type of the store which is a product. The attributes of
  * a product are final and cann be changed
  * @author Bardia Parmoun 101143006
- * @version 2.0
- * @date 2020/02/27
+ * @version 3.0
+ * @date 2020/03/21
  */
 
 public class Product{
