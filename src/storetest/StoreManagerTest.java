@@ -59,7 +59,7 @@ public class StoreManagerTest {
         int expected [] = new int[]{20,10,5,8,8,8};
         for (int i =0; i < 6; i++){
             assertEquals(expected[i],sm.checkStock(products[i]),
-                    "The output of the function did not match the expected value");
+                    "checkStock function did not return the correct value");
         }
     }
 
@@ -71,12 +71,12 @@ public class StoreManagerTest {
     public void testGetAvailableProducts() {
         // comparing the size
         assertEquals(6,sm.getAvailableProducts().size(),
-                "The output of the function did not match the expected value");
+                "getAvailableProducts did not return the expected number of products");
 
         // comparing every element
         for (Product p: sm.getAvailableProducts()){
             assertTrue(sm.checkStock(p)!=0,
-                    "The output of the function did not match the expected value");
+                    "getAvailableProducts returned an unexpected product");
         }
     }
 
@@ -92,7 +92,7 @@ public class StoreManagerTest {
         for (int i = 0; i<4; i++){
             carts[i] = new ShoppingCart(sm.assignNewCartID());
             assertEquals(expected[i],carts[i].getId(),
-                    "The output of the function did not match the expected value");
+                    "assignNewCartID assigned an incorrect id to the cart");
         }
     }
 
@@ -106,19 +106,20 @@ public class StoreManagerTest {
 
         for (int i = 0; i <3 ; i++){
             // checks the output of the addToCart method
-            assertEquals(true, sm.addToCart(products[i].getName(),i+2,i));
+            assertEquals(true, sm.addToCart(products[i].getName(),i+2,i),
+                    "addToCart does not work properly for normal values");
 
             // comparing the size of the cart
             assertEquals(1,sm.getCartProducts(i).size(),
-                    "The output of the function did not match the expected value");
+                    "addToCart did not add the product to the cart");
 
             // checking if the amount was added properly
             assertEquals(i+2,sm.getCartProducts(i).get(products[i]),
-                    "The output of the function did not match the expected value");
+                    "addToCart did not add the proper amount of the product to the cart");
 
             // checking if the inventory removed that amount
             assertEquals(expected[i],sm.checkStock(products[i]),
-                    "The output of the function did not match the expected value");
+                    "addToCart did not removed that amount of the product from the inventory");
         }
     }
 
@@ -132,9 +133,10 @@ public class StoreManagerTest {
 
         for (int i =0; i < 3; i++){
             assertEquals(expectedSize[i],sm.getCartProducts(i).size(),
-                    "The output of the function did not match the expected value");
+                    "getCartProducts did not remove the expected number of the products");
             if (sm.getCartProducts(i).size()!=0){
-                assertEquals(i+2,sm.getCartProducts(i).get(products[i]));
+                assertEquals(i+2,sm.getCartProducts(i).get(products[i]),
+                        "Checks to see the number of each product is as expected");
             }
         }
     }
@@ -148,15 +150,16 @@ public class StoreManagerTest {
         Product newProduct = new Product("cookie", 34, 2.99);
 
         // checks the output of the addToCart method
-        assertEquals(false, sm.addToCart(newProduct.getName(),1,0));
+        assertEquals(false, sm.addToCart(newProduct.getName(),1,0),
+                "addToCart does not work properly for when the product is not in the inventory");
 
         // comparing the size of the cart (it should remain 1)
         assertEquals(1,sm.getCartProducts(0).size(),
-                "The output of the function did not match the expected value");
+                "addToCart changed the size of the cart even though the product does not exist");
 
         // checking if the amount was added properly
         assertEquals(null,sm.getCartProducts(0).get(newProduct),
-                "The output of the function did not match the expected value");
+                "addToCart added the product to the cart even though the product does not exist");
     }
 
 
@@ -171,19 +174,20 @@ public class StoreManagerTest {
 
         for (int i =0; i<illegalAmount.length; i++) {
             // checks the output of the addToCart method
-            assertEquals(false, sm.addToCart(products[3].getName(), illegalAmount[i], 0));
+            assertEquals(false, sm.addToCart(products[3].getName(), illegalAmount[i], 0),
+                    "addToCart fails on edge cases (adding more than total, negative, or 0 amount)");
 
             // comparing the size of the cart (it should remain 1)
             assertEquals(1, sm.getCartProducts(0).size(),
-                    "The output of the function did not match the expected value");
+                    "addToCart changes the size of the products even though it is not supposed to");
 
             // checking if the product was added to the cart (it should not be added)
             assertEquals(null,sm.getCartProducts(0).get(products[3]),
-                    "The output of the function did not match the expected value");
+                    "addToCart adds the product to the cart even though the amount was illegal");
 
             // checking if inventory was untouched
             assertEquals(8,sm.checkStock(products[3]),
-                    "The output of the function did not match the expected value");
+                    "addToCart changes the amount of the product in inventory even though it is not supposed to");
         }
     }
 
@@ -194,22 +198,21 @@ public class StoreManagerTest {
     @Order(8)
     public void testAddToCartTotalAmount() {
         // checks the output of the addToCart method
-        assertEquals(true, sm.addToCart(products[3].getName(),8,3));
+        assertEquals(true, sm.addToCart(products[3].getName(),8,3),
+                "addToCart fails when adding the total number of a product");
 
         // comparing the size of the cart should be 1
         assertEquals(1,sm.getCartProducts(3).size(),
-                "The output of the function did not match the expected value");
+                "addToCart changes the size of the products even though it is not supposed to");
 
         // checking if the amount was added properly
         assertEquals(8,sm.getCartProducts(3).get(products[3]),
-                "The output of the function did not match the expected value");
-
+                "addToCart does not add all of the product to the cart");
 
         // checking if the inventory removed that amount
         assertEquals(0,sm.checkStock(products[3]),
-                "The output of the function did not match the expected value");
+                "addToCart does not remove all the products from the inventory");
     }
-
 
     /**
      * Testing the removeFromCart() in the StoreManager
@@ -221,19 +224,20 @@ public class StoreManagerTest {
 
         for (int i = 0; i <3 ; i++){
             // checks the output of the addToCart method
-            assertEquals(true, sm.removeFromCart(products[i].getName(),1,i));
+            assertEquals(true, sm.removeFromCart(products[i].getName(),1,i),
+                    "removeFromCart fails when a normal amount is being removed from the cart");
 
             // comparing the size of the cart
             assertEquals(1,sm.getCartProducts(i).size(),
-                    "The output of the function did not match the expected value");
+                    "removeFromCart changes the number of products even thought it is not supposed to");
 
             // checking if the product removed from the cart properly
             assertEquals(i+1,sm.getCartProducts(i).get(products[i]),
-                    "The output of the function did not match the expected value");
+                    "removeFromCart does not remove the proper amount from the cart");
 
             // checking if the inventory got that removed amount back
             assertEquals(expected[i],sm.checkStock(products[i]),
-                    "The output of the function did not match the expected value");
+                    "removeFromCart does not add the proper amount to the inventory");
         }
     }
 
@@ -245,19 +249,20 @@ public class StoreManagerTest {
     @Order(10)
     public void testRemoveFromCartProductNotThere() {
         // checks the output of the addToCart method
-        assertEquals(false, sm.removeFromCart(products[4].getName(),1,0));
+        assertEquals(false, sm.removeFromCart(products[4].getName(),1,0),
+                "removeFromCart fails when the product is not in the inventory");
 
         // comparing the size of the cart (size should not change)
         assertEquals(1,sm.getCartProducts(0).size(),
-                "The output of the function did not match the expected value");
+                "removeFromCart changed the size of the product even thought it should remain the same");
 
         // checking if the cart shows that it does not contain it
         assertEquals(null,sm.getCartProducts(0).get(products[4]),
-                "The output of the function did not match the expected value");
+                "removeFromCart changed the amount of the product even though the amount was illegal");
 
         // checking if the inventory removed any of that product's amount
         assertEquals(8,sm.checkStock(products[4]),
-                "The output of the function did not match the expected value");
+                "removeFromCart changed the number of products in the inventory even though the amount was illegal");
     }
 
 
@@ -272,15 +277,20 @@ public class StoreManagerTest {
 
         for (int i =0; i<illegalAmount.length; i++) {
             // checks the output of the addToCart method
-            assertEquals(false, sm.removeFromCart(products[0].getName(), illegalAmount[i], 0));
+            assertEquals(false, sm.removeFromCart(products[0].getName(), illegalAmount[i], 0),
+                    "removeFromCart fails on edge cases (removing more than total, negative, or 0 amount)");
 
             // comparing the size of the cart (it should remain 1)
             assertEquals(1, sm.getCartProducts(0).size(),
-                    "The output of the function did not match the expected value");
+                    "removeFromCart changed the size of the product even thought it should remain the same");
 
             // checking if the amount was removed properly (should be untouched and 1 since we already removed one)
             assertEquals(1,sm.getCartProducts(0).get(products[0]),
-                    "The output of the function did not match the expected value");
+                    "removeFromCart changed the amount of the product even though the amount was illegal");
+
+            // checking if the inventory removed any of that product's amount
+            assertEquals(8,sm.checkStock(products[4]),
+                    "removeFromCart changed the number of products in the inventory even though the amount is illegal");
         }
     }
 
@@ -292,19 +302,20 @@ public class StoreManagerTest {
     @Order(12)
     public void testRemoveFromCartTotalAmount() {
         // checks the output of the addToCart method
-        assertEquals(true, sm.removeFromCart(products[3].getName(),8,3));
+        assertEquals(true, sm.removeFromCart(products[3].getName(),8,3),
+                "removeFromCart fails when removing all the products from the cart");
 
         // comparing the size of the cart should be 0 since its only product was removed
         assertEquals(0,sm.getCartProducts(3).size(),
-                "The output of the function did not match the expected value");
+                "The size of the cart was not 0 as expected");
 
         // checking if the product was fully removed from the cart
         assertEquals(null,sm.getCartProducts(3).get(products[3]),
-                "The output of the function did not match the expected value");
+                "The product is still in the cart even though it was supposed to be removed");
 
         // checking if the amount was returned to the inventory
         assertEquals(8,sm.checkStock(products[3]),
-                "The output of the function did not match the expected value");
+                "The items were not properly returned to the inventory");
     }
 
     /**
@@ -316,7 +327,7 @@ public class StoreManagerTest {
         double expected[] = new double[]{2.99,7.98,14.97,0};
         for (int i =0 ; i<4; i++){
             assertEquals(expected[i], sm.getCartTotalPrice(i), 0.001,
-                    "The output of the function did not match the expected value" );
+                    "getTotalPrice output did not match the expected output");
         }
     }
 
@@ -329,14 +340,14 @@ public class StoreManagerTest {
         for (int i =0 ; i<2; i++){
             sm.emptyCart(i);
             assertEquals(0,sm.getCartProducts(i).size(),
-                    "The output of the function did not match the expected value");
+                    "emptyCart did not remove all of the cart's products");
         }
 
         // checking to see if the amount was returned to the inventory
         int expected [] = new int[]{20,10,2,8,8,8};
         for (int i =0; i < 6; i++){
             assertEquals(expected[i],sm.checkStock(products[i]),
-                    "The output of the function did not match the expected value");
+                    "The products that were removed from the cart were not added properly to the inventory");
         }
     }
 
@@ -349,9 +360,9 @@ public class StoreManagerTest {
         double expected[] = new double[]{0,0,14.97,0};
         for (int i =0 ; i<4; i++){
             assertEquals(expected[i], sm.checkout(i), 0.001,
-                    "The output of the function did not match the expected value");
+                    "The total price of the cart did not match the output of checkout");
             assertEquals(null,sm.getCartProducts(i),
-                    "The output of the function did not match the expected value");
+                    "checkOut did not remove all of the products in the carts");
         }
     }
 
