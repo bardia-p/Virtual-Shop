@@ -25,7 +25,7 @@ public class Inventory{
      * creates default products
      */
     public Inventory(){
-        this(new HashMap<>());
+        this(new HashMap<Product, Integer>());
         initializeInventory();
     }
 
@@ -141,6 +141,7 @@ public class Inventory{
         if (newStock < 0) {
             return false;
         }
+
         if (getStock(product.getId())!=-1) {
             if (products.get(product)-newStock>=0){
                 products.put(product,products.get(product)- newStock);
