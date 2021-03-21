@@ -112,8 +112,14 @@ public class Inventory{
      * @param newStock the number of stocks to add to the given products
      */
     public void addStock (Product product, int newStock) {
+
+        //if negative stock is being added
+        if (newStock < 0) {
+            return;
+        }
+
         // If the product already exists it adds to the existing value
-        if (getStock(product.getId()) != -1) {
+        else if (getStock(product.getId()) != -1) {
             products.put(product, products.get(product) + newStock);
         }
 
@@ -131,6 +137,10 @@ public class Inventory{
      */
     public boolean removeStock (Product product, int newStock){
         // If the product already exists it removes from the existing values
+
+        if (newStock < 0) {
+            return false;
+        }
         if (getStock(product.getId())!=-1) {
             if (products.get(product)-newStock>=0){
                 products.put(product,products.get(product)- newStock);
