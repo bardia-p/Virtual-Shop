@@ -25,7 +25,7 @@ public class Inventory{
      * creates default products
      */
     public Inventory(){
-        this(new HashMap<Product, Integer>());
+        this(new HashMap<>());
         initializeInventory();
     }
 

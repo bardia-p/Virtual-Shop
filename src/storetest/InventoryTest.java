@@ -64,6 +64,15 @@ class InventoryTest {
     }
 
     /**
+     * Test getting hashmap of all products
+     */
+    @Test
+    public void testGetProducts() {
+
+        //Hashmap is never null
+        assertEquals(initialProducts, inv.getProducts(), "getProduct does not return correct HashMap");
+    }
+    /**
      * Testing get product info for a product that doesn't exist
      */
     @Test
