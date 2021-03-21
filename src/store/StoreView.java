@@ -318,6 +318,8 @@ public class StoreView {
                     System.out.println("ADDTOCART > ERROR > BAD CHOICE");
                     System.out.println("Input must be an integer value");
                 }
+
+                numTries--;
             }
         }
         System.out.printf("CART>>> $%.2f\n", storeManager.getCartTotalPrice(cartId));
