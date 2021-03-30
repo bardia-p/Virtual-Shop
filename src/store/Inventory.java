@@ -43,13 +43,19 @@ public class Inventory{
      */
     private void initializeInventory(){
         // making some default products
-        Product p1 = new Product("apple pie", 001,2.99);
-        Product p2 = new Product("blueberry pie", 002,3.99);
-        Product p3 = new Product("cake", 003,4.99);
+        Product p1 = new Product("apple pie", 001,2.99,
+                "https://cdn.discordapp.com/attachments/760006680619515907/826481087530270800/apple_pie.jpg");
+        Product p2 = new Product("blueberry pie", 002,3.99,
+                "https://cdn.discordapp.com/attachments/760006680619515907/826481089794146304/blueberry_pie.jpg");
+        Product p3 = new Product("cake", 003,4.99,
+                "https://cdn.discordapp.com/attachments/760006680619515907/826481091023077376/cake.jpg");
 
-        Product p4 = new Product("cooking book", 101,15.99);
-        Product p5 = new Product("baking recipes", 102,8.99);
-        Product p6 = new Product("cooking tutorials", 103,19.99);
+        Product p4 = new Product("cooking book", 101,15.99,
+                "https://cdn.discordapp.com/attachments/760006680619515907/826481092508123166/cooking_book.jpg");
+        Product p5 = new Product("baking recipes", 102,8.99,
+                "https://cdn.discordapp.com/attachments/760006680619515907/826481088913473576/baking_recipes.jpg");
+        Product p6 = new Product("cooking tutorials", 103,19.99,
+                "https://cdn.discordapp.com/attachments/760006680619515907/826481094337495091/cooking_tutorials.jpg");
 
         this.addStock(p1,20);
         this.addStock(p2,10);

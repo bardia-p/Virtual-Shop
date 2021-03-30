@@ -30,15 +30,21 @@ public class Product{
     private final double PRICE;
 
     /**
+     * The name of the image for the product
+     */
+    private final String IMAGEURL;
+
+    /**
      * The constructor for the product class
      * @param name the name of the product
      * @param id the id of the product
      * @param price the price of the product
      */
-    public Product(String name, int id, double price){
+    public Product(String name, int id, double price, String imageURL){
         this.NAME = name;
         this.ID = id;
         this.PRICE = price;
+        this.IMAGEURL = imageURL;
     }
 
     /**
@@ -58,6 +64,12 @@ public class Product{
      * @return the price of the product
      */
     public double getPrice (){return PRICE;}
+
+    /**
+     * getting the image name of the product
+     * @return the image name of the product
+     */
+    public String getImageURL (){return IMAGEURL;}
 
     /**
      * Overides the equals method in product

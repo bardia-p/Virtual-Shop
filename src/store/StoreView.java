@@ -3,15 +3,37 @@
 
 package store;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
+import javax.swing.*;
+import java.awt.*;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.net.URL;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.border.TitledBorder;
+import java.awt.Font;
 
 /**
  * The class that assigns each user a store view and keeps track of all the storeviews
  * @author Guy Morgenshtern 101151430 & Bardia Parmoun 101143006
- * @version 2.0
- * @date 2020/03/20
+ * @version 3.0
+ * @date 2020/03/30
  */
 public class StoreView {
+    /**
+     * Keeps track of the main frame for the store
+     */
+    private final JFrame frame;
+
     /**
      * Keeps track of the main store using StoreManager
      */
@@ -23,6 +45,21 @@ public class StoreView {
     private int cartId;
 
     /**
+     * Keeps track of the panels for all of the products
+     */
+    private ArrayList<JPanel> productPanels;
+
+    /**
+     * Keeps track of the labels for all of the products
+     */
+    private HashMap<Product, JLabel> productInfoLabels;
+
+
+    //private HashMap<Product,Integer> addButtonEnables;
+
+    //private HashMap<Product,Integer> removeButtonEnables;
+
+    /**
      * The default constructor for storeview which creates an instance of a user
      * @param storeManager the manager of the store
      * @param cartId the id of the  cart
@@ -30,6 +67,85 @@ public class StoreView {
     public StoreView(StoreManager storeManager, int cartId) {
         this.storeManager = storeManager;
         this.cartId = cartId;
+        this.frame = new JFrame();
+        this.productPanels = new ArrayList<>();
+        this.productInfoLabels = new HashMap<>();
+    }
+
+    /**
+     * Adds the item to the cart
+     * @return JButton : a JButton object.
+     */
+    private JButton getAddToCartButton(Product product) {
+        JButton button = new JButton("+");
+        button.setSize(50,30);
+
+        // add the action listener
+        button.addActionListener(new ActionListener() {
+
+            // this method will be called when we click the button
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                if (!addToCartUI(product.getName(), 1)){
+                    JOptionPane.showMessageDialog(frame, "Illegal amount!", "Error", JOptionPane.ERROR_MESSAGE);
+                    //addButtonEnables.put(product);
+                }
+                else{
+
+                    productInfoLabels.get(product).setText("Price: $" + product.getPrice() + " Stock:" +
+                            storeManager.checkStock(product));
+                }
+            }
+        });
+        return button;
+    }
+
+    /**
+     * Removes the item from the cart
+     * @return JButton : a JButton object.
+     */
+    private JButton getRemoveFromCartButton(Product product) {
+        JButton button = new JButton("-");
+        button.setSize(50,30);
+
+        // add the action listener
+        button.addActionListener(new ActionListener() {
+
+            // this method will be called when we click the button
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                if (!removeFromCartUI(product.getName(), 1)){
+                    JOptionPane.showMessageDialog(frame, "Illegal amount!");
+                }
+                else{
+                    productInfoLabels.get(product).setText("Price: $" + product.getPrice() + " Stock:" +
+                            storeManager.checkStock(product));
+                }
+            }
+        });
+
+        return button;
+    }
+
+    /**
+     * Shows the contents of the cart
+     * @return JButton : a JButton object.
+     */
+    private JButton getViewCartButton(Icon icon) {
+        JButton button = new JButton("View Cart", icon);
+        button.setSize(50,30);
+
+        // add the action listener
+        button.addActionListener(new ActionListener() {
+
+            // this method will be called when we click the button
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                displayCart();
+            }
+        });
+
+        return button;
     }
 
     /**
@@ -40,7 +156,7 @@ public class StoreView {
         StoreManager sm = new StoreManager();
 
         // The number of allowed active users
-        int activeSV = 3;
+        int activeSV = 1;
 
         StoreView[] customers = new StoreView[activeSV];
 
@@ -48,9 +164,12 @@ public class StoreView {
             customers[i] = new StoreView(sm, sm.assignNewCartID());
         }
 
+        customers[0].displayGUI();
+        /*
         Scanner sc = new Scanner(System.in);
 
         int storeId = -1;
+
 
         // Keeps track of all the active users
         while (activeSV>0){
@@ -98,6 +217,7 @@ public class StoreView {
         }
 
         System.out.println("ALL STOREVIEWS DEACTIVATED");
+        */
     }
 
     /**
@@ -105,6 +225,97 @@ public class StoreView {
      * @return true if the UI finished successfully
      */
     public boolean displayGUI(){
+        JFrame frame = new JFrame();
+        frame.setTitle("Guy and Bardia's Pie and Media!");
+        frame.setMinimumSize(new Dimension(1300, 900));
+
+        JPanel mainPanel =  new JPanel(new GridBagLayout());
+        JPanel headerPanel = new JPanel();
+        JPanel productPanel = new JPanel(new GridLayout(3,2));
+        JPanel menuPanel = new JPanel();
+        JPanel footerPanel = new JPanel();
+
+        // create your JLabels here
+        Font fontTitle = new Font("Comic Sans Ms", Font.BOLD + Font.ITALIC, 14);
+        JLabel headerLabel = new JLabel("Welcome to Guy and Bardia's Pie and Media! (ID: " + cartId + ")");
+        headerLabel.setFont(fontTitle);
+
+        // adding JLabel to the header panel
+        headerPanel.add(headerLabel,BorderLayout.CENTER);
+
+        // set the preferred sizes and colours
+        headerPanel.setPreferredSize(new Dimension(500, 50));
+        productPanel.setPreferredSize(new Dimension(500, 700));
+        menuPanel.setPreferredSize(new Dimension(500, 700));
+        footerPanel.setPreferredSize(new Dimension(500, 50));
+
+
+        displayItems();
+
+        for (JPanel p: productPanels){
+            productPanel.add(p);
+        }
+
+        try {
+            JLabel menuLabel = new JLabel("Menu:");
+            menuLabel.setFont(fontTitle);
+            menuPanel.add(menuLabel);
+            BufferedImage img = ImageIO.read(new URL(
+                    "https://cdn.discordapp.com/attachments/760006680619515907/826517262323286027/cart.jpg"));
+            Image dimg = img.getScaledInstance(50,50, Image.SCALE_SMOOTH);
+            ImageIcon icon = new ImageIcon(dimg);
+            menuPanel.add(getViewCartButton(icon));
+        }
+
+        catch (IOException e){
+            JOptionPane.showMessageDialog(frame, "Could not load the image", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        // adding all the panels to the main panel
+        GridBagConstraints gbagConstraintsHeader = new GridBagConstraints();
+        gbagConstraintsHeader.gridx = 0;
+        gbagConstraintsHeader.gridy = 0;
+        mainPanel.add(headerPanel, gbagConstraintsHeader);
+
+        GridBagConstraints gbagConstraintsProduct = new GridBagConstraints();
+        gbagConstraintsProduct.gridx = 0;
+        gbagConstraintsProduct.gridy = 1;
+        mainPanel.add(productPanel, gbagConstraintsProduct);
+
+        GridBagConstraints gbagConstraintsMenu = new GridBagConstraints();
+        gbagConstraintsMenu.gridx = 1;
+        gbagConstraintsMenu.gridy = 1;
+        mainPanel.add(menuPanel, gbagConstraintsMenu);
+
+        GridBagConstraints gbagConstraintsFooter = new GridBagConstraints();
+        gbagConstraintsFooter.gridx = 0;
+        gbagConstraintsFooter.gridy = 2;
+        mainPanel.add(footerPanel, gbagConstraintsFooter);
+
+
+        // add the window listener
+        // we no longer want the frame to close immediately when we press "x"
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent we) {
+                if (JOptionPane.showConfirmDialog(frame, "Are you sure you want to quit?")
+                        == JOptionPane.OK_OPTION) {
+                    // close it down!
+                    frame.setVisible(false);
+                    frame.dispose();
+                }
+            }
+        });
+
+        // the frame is not visible until we set it to be so
+        frame.setVisible(true);
+
+        // pack
+        frame.add(mainPanel);
+        frame.pack();
+
+        /*
         Scanner sc = new Scanner(System.in);
         String input;
 
@@ -170,125 +381,24 @@ public class StoreView {
             System.out.println("Invalid command was entered");
             return true;
         }
+        */
+        return true;
     }
 
     /**
      * Displays the removefromcart interface where the user is prompted to choose a product and a proper amount which
      * is then removed from the cart
      */
-    private void removeFromCartUI(){
-        Scanner sc = new Scanner(System.in);
-        String product;
-        int amount;
-
-        if (storeManager.getCartProducts(cartId).size()!=0) {
-            System.out.println("Enter the name of the product (type 'back' to exit this mode)");
-            product = sc.nextLine().toLowerCase();
-
-            if (!product.equals("back")) {
-                System.out.println("Enter the amount");
-
-                try {
-                    amount = Integer.parseInt(sc.nextLine());
-                }
-                catch (NumberFormatException e){
-                    System.out.println("REMOVEFROMCART > ERROR > BAD CHOICE");
-                    System.out.println("Input must be an integer value");
-                    amount = -1;
-                }
-
-                // Makes sure the product and its stock exist in the cart
-                int numTries = 2;
-                while (!storeManager.removeFromCart(product, amount, cartId)) {
-                    if (numTries==0){
-                        System.out.println("You ran out of tries");
-                        break;
-                    }
-                    System.out.println("Invalid product name or amount");
-                    System.out.printf("You have %d tries left\n", numTries);
-
-                    System.out.println("Enter the name of the product (type 'back' to exit this mode)");
-
-                    product = sc.nextLine().toLowerCase();
-
-                    if (product.equals("back")) {
-                        break;
-                    }
-
-                    System.out.println("Enter the amount");
-
-                    try {
-                        amount = Integer.parseInt(sc.nextLine());
-                    }
-                    catch (NumberFormatException  e){
-                        System.out.println("REMOVEFROMCART > ERROR > BAD CHOICE");
-                        System.out.println("Input must be an integer value");
-                        amount = -1;
-                    }
-
-                    numTries--;
-                }
-            }
-            System.out.printf("CART>>> $%.2f\n", storeManager.getCartTotalPrice(cartId));
-        }
+    private boolean removeFromCartUI(String product, int amount){
+        return storeManager.removeFromCart(product, amount, cartId);
     }
 
     /**
      * Displays the addToCart interface where the user is prompted to choose a product and a proper amount which is then
      * added to the cart
      */
-    public void addToCartUI(){
-        Scanner sc = new Scanner(System.in);
-        String product;
-        int amount;
-
-        System.out.println("Enter the name of the product (type 'back' to exit this mode)");
-        product = sc.nextLine().toLowerCase();
-
-        if (!product.equals("back")) {
-            System.out.println("Enter the amount");
-
-            try {
-                amount = Integer.parseInt(sc.nextLine());
-            }
-            catch (NumberFormatException e){
-                System.out.println("ADDTOCART > ERROR > BAD CHOICE");
-                System.out.println("Input must be an integer value");
-                amount = -1;
-            }
-
-            // Makes sure the product and its stock exist in the inventory
-            int numTries = 2;
-            while (!storeManager.addToCart(product, amount, cartId)) {
-                if (numTries==0){
-                    System.out.println("You ran out of tries");
-                    break;
-                }
-                System.out.println("Invalid product name or amount");
-                System.out.printf("You have %d tries left\n", numTries);
-
-                System.out.println("Enter the name of the product (type 'back' to exit this mode)");
-                product = sc.nextLine().toLowerCase();
-
-                if (product.equals("back")) {
-                    break;
-                }
-
-                System.out.println("Enter the amount");
-
-                try {
-                    amount = Integer.parseInt(sc.nextLine());
-                }
-                catch (NumberFormatException e){
-                    System.out.println("ADDTOCART > ERROR > BAD CHOICE");
-                    System.out.println("Input must be an integer value");
-                    amount = -1;
-                }
-
-                numTries--;
-            }
-        }
-        System.out.printf("CART>>> $%.2f\n", storeManager.getCartTotalPrice(cartId));
+    public boolean addToCartUI(String product, int amount){
+        return storeManager.addToCart(product, amount, cartId);
     }
 
     /**
@@ -300,17 +410,67 @@ public class StoreView {
         String price;
         String printMsg;
 
-        System.out.println("Stock             Product                Price");
-        System.out.println("__________________________________________________");
+        //System.out.println("Stock             Product                Price");
+        //System.out.println("__________________________________________________");
+        int width = 200;
+        int height = 150;
+
         for (int i = 0; i < storeManager.getAvailableProducts().size(); i++) {
-            name = storeManager.getAvailableProducts().get(i).getName();
-            stock = String.valueOf(storeManager.checkStock(storeManager.getAvailableProducts().get(i)));
-            price = String.valueOf(storeManager.getAvailableProducts().get(i).getPrice());
+            try {
+                Product p = storeManager.getAvailableProducts().get(i);
+                name = p.getName();
+                stock = String.valueOf(storeManager.checkStock(p));
+                price = String.valueOf(p.getPrice());
+
+                //the label for the image
+                JLabel productLabel = new JLabel();
+                productLabel.setPreferredSize(new Dimension(width,height));
+
+                //loading the image
+                BufferedImage img = ImageIO.read(new URL(
+                        storeManager.getAvailableProducts().get(i).getImageURL()));
+
+                //resizing the image
+                Image dimg = img.getScaledInstance(width,height, Image.SCALE_SMOOTH);
+
+                //adding the image to the label
+                ImageIcon icon = new ImageIcon(dimg);
+                productLabel.setIcon(icon);
+
+
+                //adding the label to the panel
+                JPanel productPanel = new JPanel();
+                JLabel productInfo = new JLabel("Price: $" + price + " Stock:" + stock);
+
+                productInfoLabels.put(p,productInfo);
+
+                productPanel.add(productInfo,BorderLayout.NORTH);
+
+                productPanel.add(productLabel,BorderLayout.CENTER);
+
+                productPanel.add(getAddToCartButton(p), BorderLayout.SOUTH);
+
+                productPanel.add(getRemoveFromCartButton(p), BorderLayout.SOUTH);
+
+                //adding the border
+                TitledBorder title = BorderFactory.createTitledBorder(name);
+                productPanel.setBorder(title);
+
+                productPanel.setPreferredSize(new Dimension(width, height+100));
+                productPanels.add(productPanel);
+            }
+            catch(IOException e){
+                JOptionPane.showMessageDialog(frame, "Could not load the image" , "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+
+            /*
 
             printMsg = String.format("%s" +"%" + (15-stock.length() + name.length()) +"s" + "%" +
                     (25 - name.length() + price.length()) + "s", stock,name, price);
 
             System.out.println(printMsg);
+            */
         }
     }
 
@@ -325,8 +485,10 @@ public class StoreView {
 
         boolean isCartEmpty = true;
 
-        System.out.println("Stock             Product                Price");
-        System.out.println("__________________________________________________");
+        String cartText;
+        cartText =  "Stock             Product                Price\n";
+        cartText += "__________________________________________________\n";
+
         for (Product p : storeManager.getCartProducts(cartId).keySet()) {
             if (storeManager.getCartProducts(cartId).get(p)>0){
                 isCartEmpty = false;
@@ -337,12 +499,17 @@ public class StoreView {
                 printMsg = String.format("%s" + "%" + (15 - stock.length() + name.length()) + "s" + "%" +
                         (25 - name.length() + price.length()) + "s", stock, name, price);
 
-                System.out.println(printMsg);
+                cartText += printMsg+"\n";
             }
         }
 
         if (isCartEmpty){
-            System.out.println("Cart is empty");
+            cartText += "Cart is empty\n";
         }
+
+        cartText += "__________________________________________________\n";
+        cartText+="Cart total: " + Math.round(storeManager.getCartTotalPrice(cartId) * 100.0)/100.0;
+
+        JOptionPane.showMessageDialog(frame, cartText, "Your cart!", JOptionPane.INFORMATION_MESSAGE);
     }
 }

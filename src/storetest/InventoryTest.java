@@ -46,10 +46,10 @@ class InventoryTest {
     public void setUp() {
          //setting up initial products for testGet methods
          initialProducts = new HashMap<>();
-         initialProducts.put(new Product("Apple Pie", 1, 9.99), 10);
-         initialProducts.put(new Product("Peach Pie", 2, 9.99), 5);
-         initialProducts.put(new Product("Rhubarb Pie", 3, 9.99), 1);
-         initialProducts.put(new Product("Pumpkin Pie", 4, 9.99), 20);
+         initialProducts.put(new Product("Apple Pie", 1, 9.99,""), 10);
+         initialProducts.put(new Product("Peach Pie", 2, 9.99,""), 5);
+         initialProducts.put(new Product("Rhubarb Pie", 3, 9.99,""), 1);
+         initialProducts.put(new Product("Pumpkin Pie", 4, 9.99,""), 20);
 
          //creating test inv with initial products
          inv = new Inventory(initialProducts);
@@ -135,7 +135,7 @@ class InventoryTest {
      */
     @Test
     public void testAddStockNoProductExists() {
-        Product newProduct = new Product("Barak Obama's Biography", 5, 10.99);
+        Product newProduct = new Product("Barak Obama's Biography", 5, 10.99, "");
 
         //adding new product to inventory
         inv.addStock(newProduct, 10);
@@ -187,7 +187,7 @@ class InventoryTest {
      */
     @Test
     public void testRemoveStockNoProductExists() {
-        Product newProduct = new Product("Lego set", invalidID, 15.99);
+        Product newProduct = new Product("Lego set", invalidID, 15.99, "");
 
         //assert correct output from function
         assertEquals(false, inv.removeStock(newProduct, 10),
