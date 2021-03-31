@@ -4,10 +4,8 @@
 package store;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
 import javax.swing.*;
 import java.awt.*;
 
@@ -54,11 +52,6 @@ public class StoreView {
      */
     private HashMap<Product, JLabel> productInfoLabels;
 
-
-    //private HashMap<Product,Integer> addButtonEnables;
-
-    //private HashMap<Product,Integer> removeButtonEnables;
-
     /**
      * The default constructor for storeview which creates an instance of a user
      * @param storeManager the manager of the store
@@ -70,6 +63,7 @@ public class StoreView {
         this.frame = new JFrame();
         this.productPanels = new ArrayList<>();
         this.productInfoLabels = new HashMap<>();
+
     }
 
     /**
@@ -88,10 +82,8 @@ public class StoreView {
             public void actionPerformed(ActionEvent ae) {
                 if (!addToCartUI(product.getName(), 1)){
                     JOptionPane.showMessageDialog(frame, "Illegal amount!", "Error", JOptionPane.ERROR_MESSAGE);
-                    //addButtonEnables.put(product);
                 }
                 else{
-
                     productInfoLabels.get(product).setText("Price: $" + product.getPrice() + " Stock:" +
                             storeManager.checkStock(product));
                 }
@@ -132,7 +124,7 @@ public class StoreView {
      * @return JButton : a JButton object.
      */
     private JButton getViewCartButton(Icon icon) {
-        JButton button = new JButton("View Cart", icon);
+        JButton button = new JButton("view cart", icon);
         button.setSize(50,30);
 
         // add the action listener
@@ -142,6 +134,91 @@ public class StoreView {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 displayCart();
+            }
+        });
+
+        return button;
+    }
+
+    /**
+     * Creates the button that empties the cart
+     * @return the empty cart button
+     */
+    private JButton getEmptyCartButton() {
+        JButton button = new JButton("empty cart");
+        button.setSize(50,30);
+
+        // add the action listener
+        button.addActionListener(new ActionListener() {
+
+            // this method will be called when we click the button
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                if (JOptionPane.showConfirmDialog(frame, "Are you sure you want to empty your cart?")
+                        == JOptionPane.OK_OPTION) {
+                    // close it down!
+                    storeManager.emptyCart(cartId);
+                    for (Product p: productInfoLabels.keySet()) {
+                        productInfoLabels.get(p).setText("Price: $" + p.getPrice() + " Stock:" +
+                                storeManager.checkStock(p));
+                    }
+                }
+
+            }
+        });
+
+        return button;
+    }
+
+    /**
+     * Creates that checkout button
+     * @return the checkout the buttom
+     */
+    private JButton getCheckoutButton() {
+        JButton button = new JButton("checkout");
+        button.setSize(50,30);
+
+        // add the action listener
+        button.addActionListener(new ActionListener() {
+
+            // this method will be called when we click the button
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                    if (JOptionPane.showConfirmDialog(frame, "Are you sure you want to checkout?")
+                                == JOptionPane.OK_OPTION) {
+                            // close it down!
+                            displayCart();
+                            storeManager.checkout(cartId);
+                            frame.setVisible(false);
+                            frame.dispose();
+                    }
+                };
+        });
+        return button;
+    }
+
+    /**
+     * Creates the quit button
+     * @return the quit button
+     */
+    private JButton getQuitButton() {
+        JButton button = new JButton("quit");
+        button.setSize(50,30);
+
+        // add the action listener
+        button.addActionListener(new ActionListener() {
+
+            // this method will be called when we click the button
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                if (JOptionPane.showConfirmDialog(frame, "Are you sure you want to quit?")
+                        == JOptionPane.OK_OPTION) {
+                    // close it down!
+                    storeManager.emptyCart(cartId);
+                    frame.setVisible(false);
+                    frame.dispose();
+                }
+
             }
         });
 
@@ -165,59 +242,6 @@ public class StoreView {
         }
 
         customers[0].displayGUI();
-        /*
-        Scanner sc = new Scanner(System.in);
-
-        int storeId = -1;
-
-
-        // Keeps track of all the active users
-        while (activeSV>0){
-            System.out.printf("Number of actve users: %d\n",activeSV);
-            System.out.println("CHOOSE YOUR STOREVIEW>>>");
-            String availableStores = "THE AVAILABLE STOREVIEWS ARE: ";
-
-            for (int i = 0; i <customers.length; i++){
-                if (customers[i]!=null){
-                    availableStores+=i+" ";
-                }
-            }
-            System.out.println(availableStores);
-
-            try {
-                 storeId = Integer.parseInt(sc.nextLine());
-                // Checks to see if the entered storeview is within the given range
-                if (storeId >= 0 && storeId <customers.length){
-                    // Checks to see if the storeview is available
-                    if (customers[storeId]!=null){
-                        String userChoice = "n";
-                        while (!userChoice.equals("y")){
-                            if (!customers[storeId].displayGUI()) {
-                                customers[storeId] = null;
-                                activeSV--;
-                                break;
-                            }
-                            System.out.print("GO TO ANOTHER STOREVIEW? (y) >>> ");
-                            userChoice = sc.nextLine().toLowerCase();
-                        }
-                    } else{
-                        System.out.println("MAIN > ERROR > BAD CHOICE\nTHAT STOREVIEW WAS DEACTIVATED");
-                    }
-                } else{
-                    System.out.println( String.format("MAIN > ERROR > BAD CHOICE\nPLEASE CHOOSE IN RANGE [%d, %d]", 0, customers.length - 1) );
-                }
-            }
-
-            // If the input is not integer
-            catch (NumberFormatException e){
-                System.out.println("MAIN > ERROR > BAD CHOICE");
-                System.out.println("Input must be an integer value");
-                storeId = -1;
-            }
-        }
-
-        System.out.println("ALL STOREVIEWS DEACTIVATED");
-        */
     }
 
     /**
@@ -225,14 +249,17 @@ public class StoreView {
      * @return true if the UI finished successfully
      */
     public boolean displayGUI(){
-        JFrame frame = new JFrame();
         frame.setTitle("Guy and Bardia's Pie and Media!");
-        frame.setMinimumSize(new Dimension(1300, 900));
+        frame.setResizable(false);
 
         JPanel mainPanel =  new JPanel(new GridBagLayout());
         JPanel headerPanel = new JPanel();
+        JPanel leftSpacePanel = new JPanel();
+        JPanel middleSpacePanel = new JPanel();
+        JPanel rightSpacePanel = new JPanel();
+
         JPanel productPanel = new JPanel(new GridLayout(3,2));
-        JPanel menuPanel = new JPanel();
+        JPanel menuPanel = new JPanel(new GridLayout(3,1));
         JPanel footerPanel = new JPanel();
 
         // create your JLabels here
@@ -240,58 +267,77 @@ public class StoreView {
         JLabel headerLabel = new JLabel("Welcome to Guy and Bardia's Pie and Media! (ID: " + cartId + ")");
         headerLabel.setFont(fontTitle);
 
-        // adding JLabel to the header panel
-        headerPanel.add(headerLabel,BorderLayout.CENTER);
-
         // set the preferred sizes and colours
         headerPanel.setPreferredSize(new Dimension(500, 50));
         productPanel.setPreferredSize(new Dimension(500, 700));
-        menuPanel.setPreferredSize(new Dimension(500, 700));
+        menuPanel.setPreferredSize(new Dimension(150, 100));
+        leftSpacePanel.setPreferredSize(new Dimension(50, 100));
+        middleSpacePanel.setPreferredSize(new Dimension(50, 100));
+        rightSpacePanel.setPreferredSize(new Dimension(50, 100));
         footerPanel.setPreferredSize(new Dimension(500, 50));
 
 
+        // adding JLabel to the header panel and footer panel
+        headerPanel.add(headerLabel,BorderLayout.CENTER);
+        footerPanel.add(getEmptyCartButton());
+
         displayItems();
+
 
         for (JPanel p: productPanels){
             productPanel.add(p);
         }
 
         try {
-            JLabel menuLabel = new JLabel("Menu:");
-            menuLabel.setFont(fontTitle);
-            menuPanel.add(menuLabel);
             BufferedImage img = ImageIO.read(new URL(
-                    "https://cdn.discordapp.com/attachments/760006680619515907/826517262323286027/cart.jpg"));
+                    "https://user-images.githubusercontent.com/59774562/113081179-32ee2a80-91a6-11eb-8dfb-0d6d2b17ec4a.png"));
             Image dimg = img.getScaledInstance(50,50, Image.SCALE_SMOOTH);
             ImageIcon icon = new ImageIcon(dimg);
-            menuPanel.add(getViewCartButton(icon));
+            menuPanel.add(getViewCartButton(icon), BorderLayout.NORTH);
+            menuPanel.add(getCheckoutButton(), BorderLayout.CENTER);
+            menuPanel.add(getQuitButton(), BorderLayout.SOUTH);
         }
 
         catch (IOException e){
             JOptionPane.showMessageDialog(frame, "Could not load the image", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
+
         // adding all the panels to the main panel
         GridBagConstraints gbagConstraintsHeader = new GridBagConstraints();
-        gbagConstraintsHeader.gridx = 0;
+        gbagConstraintsHeader.gridx = 1;
         gbagConstraintsHeader.gridy = 0;
         mainPanel.add(headerPanel, gbagConstraintsHeader);
 
+        GridBagConstraints gbagConstraintsLeftSpace = new GridBagConstraints();
+        gbagConstraintsLeftSpace.gridx = 0;
+        gbagConstraintsLeftSpace.gridy = 1;
+        mainPanel.add(leftSpacePanel, gbagConstraintsLeftSpace);
+
         GridBagConstraints gbagConstraintsProduct = new GridBagConstraints();
-        gbagConstraintsProduct.gridx = 0;
+        gbagConstraintsProduct.gridx = 1;
         gbagConstraintsProduct.gridy = 1;
         mainPanel.add(productPanel, gbagConstraintsProduct);
 
+        GridBagConstraints gbagConstraintsMiddleSpace = new GridBagConstraints();
+        gbagConstraintsMiddleSpace.gridx = 2;
+        gbagConstraintsMiddleSpace.gridy = 1;
+        mainPanel.add(middleSpacePanel, gbagConstraintsMiddleSpace);
+
         GridBagConstraints gbagConstraintsMenu = new GridBagConstraints();
-        gbagConstraintsMenu.gridx = 1;
+        gbagConstraintsMenu.gridx = 3;
         gbagConstraintsMenu.gridy = 1;
         mainPanel.add(menuPanel, gbagConstraintsMenu);
 
+        GridBagConstraints gbagConstraintsRightSpace = new GridBagConstraints();
+        gbagConstraintsRightSpace.gridx = 4;
+        gbagConstraintsRightSpace.gridy = 1;
+        mainPanel.add(rightSpacePanel, gbagConstraintsRightSpace);
+
         GridBagConstraints gbagConstraintsFooter = new GridBagConstraints();
-        gbagConstraintsFooter.gridx = 0;
+        gbagConstraintsFooter.gridx = 1;
         gbagConstraintsFooter.gridy = 2;
         mainPanel.add(footerPanel, gbagConstraintsFooter);
-
 
         // add the window listener
         // we no longer want the frame to close immediately when we press "x"
@@ -311,77 +357,10 @@ public class StoreView {
         // the frame is not visible until we set it to be so
         frame.setVisible(true);
 
+
         // pack
         frame.add(mainPanel);
         frame.pack();
-
-        /*
-        Scanner sc = new Scanner(System.in);
-        String input;
-
-        System.out.println("--------Guy and Bardia, Pie and Media--------");
-        System.out.println("Type 'help' for a list of commands");
-        System.out.printf("CART>>> $%.2f\n", storeManager.getCartTotalPrice(cartId));
-        System.out.println("Enter a new command");
-
-        input = sc.nextLine().toLowerCase();
-
-        // Displays the possible commands that can be entered
-        if (input.equals("help")){
-            System.out.println("Type 'browse' to view all the items in the store");
-            System.out.println("Type 'addtocart' to add new items to the cart");
-            System.out.println("Type 'checkout' to checkout");
-            System.out.println("Type 'quit' to quit");
-            return true;
-        }
-
-        // Displays all the items in the store
-        else if (input.equals("browse")){
-            System.out.println("-------------browse--------------");
-            displayItems();
-            return true;
-        }
-
-        // Checks out the user
-        else if (input.equals("checkout")){
-            for (Product product: storeManager.getCartProducts(cartId).keySet()){
-                int amount = storeManager.getCartProducts(cartId).get(product);
-                System.out.printf("%s: %d = $%.2f\n", product.getName(), amount, product.getPrice()*amount);
-            }
-
-            System.out.printf("%s = $%.2f\n", "Total", storeManager.checkout(cartId));
-            return false;
-        }
-
-        // Adds a new item to the user cart
-        else if (input.equals("addtocart")){
-            System.out.println("-------------ADD--------------");
-            displayItems();
-            addToCartUI();
-            return true;
-        }
-
-        // Makes sure the product and its stock exist in the cart
-        else if (input.equals("removefromcart")){
-            System.out.println("--------------REMOVE--------------");
-            displayCart();
-            removeFromCartUI();
-            return true;
-        }
-
-        // quits the user
-        else if (input.equals("quit")){
-            storeManager.emptyCart(cartId);
-            System.out.printf("%s = $%.2f\n", "Total", storeManager.checkout(cartId));
-            return false;
-        }
-
-        // command does not exist
-        else{
-            System.out.println("Invalid command was entered");
-            return true;
-        }
-        */
         return true;
     }
 
@@ -408,10 +387,7 @@ public class StoreView {
         String name;
         String stock;
         String price;
-        String printMsg;
 
-        //System.out.println("Stock             Product                Price");
-        //System.out.println("__________________________________________________");
         int width = 200;
         int height = 150;
 
@@ -440,6 +416,8 @@ public class StoreView {
 
                 //adding the label to the panel
                 JPanel productPanel = new JPanel();
+                productPanel.setPreferredSize(new Dimension(width, height+100));
+
                 JLabel productInfo = new JLabel("Price: $" + price + " Stock:" + stock);
 
                 productInfoLabels.put(p,productInfo);
@@ -456,21 +434,11 @@ public class StoreView {
                 TitledBorder title = BorderFactory.createTitledBorder(name);
                 productPanel.setBorder(title);
 
-                productPanel.setPreferredSize(new Dimension(width, height+100));
                 productPanels.add(productPanel);
             }
             catch(IOException e){
                 JOptionPane.showMessageDialog(frame, "Could not load the image" , "Error", JOptionPane.ERROR_MESSAGE);
             }
-
-
-            /*
-
-            printMsg = String.format("%s" +"%" + (15-stock.length() + name.length()) +"s" + "%" +
-                    (25 - name.length() + price.length()) + "s", stock,name, price);
-
-            System.out.println(printMsg);
-            */
         }
     }
 

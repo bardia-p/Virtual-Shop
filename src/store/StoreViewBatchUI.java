@@ -11,7 +11,7 @@ import java.util.Scanner;
  * @version 2.0
  * @date 2020/03/20
  */
-public class StoreView {
+public class StoreViewBatchUI {
     /**
      * Keeps track of the main store using StoreManager
      */
@@ -27,7 +27,7 @@ public class StoreView {
      * @param storeManager the manager of the store
      * @param cartId the id of the  cart
      */
-    public StoreView(StoreManager storeManager, int cartId) {
+    public StoreViewBatchUI(StoreManager storeManager, int cartId) {
         this.storeManager = storeManager;
         this.cartId = cartId;
     }
@@ -42,10 +42,10 @@ public class StoreView {
         // The number of allowed active users
         int activeSV = 3;
 
-        StoreView[] customers = new StoreView[activeSV];
+        StoreViewBatchUI[] customers = new StoreViewBatchUI[activeSV];
 
         for (int i=0; i<activeSV; i++){
-            customers[i] = new StoreView(sm, sm.assignNewCartID());
+            customers[i] = new StoreViewBatchUI(sm, sm.assignNewCartID());
         }
 
         Scanner sc = new Scanner(System.in);
@@ -66,7 +66,7 @@ public class StoreView {
             System.out.println(availableStores);
 
             try {
-                 storeId = Integer.parseInt(sc.nextLine());
+                storeId = Integer.parseInt(sc.nextLine());
                 // Checks to see if the entered storeview is within the given range
                 if (storeId >= 0 && storeId <customers.length){
                     // Checks to see if the storeview is available

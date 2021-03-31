@@ -5,6 +5,7 @@ package store;
 
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * This class manages the main interface of the store where the customers can check
@@ -70,10 +71,12 @@ public class StoreManager {
         double total = 0;
         HashMap<Product, Integer> orders= cart.getProducts();
 
-        // Proceeds to calculate cost of the order and removing it from the stock
-        for (Product product: orders.keySet()){
+        Iterator it = orders.keySet().iterator();
+
+        while (it.hasNext()) {
+            Product product = (Product)it.next();
             total +=product.getPrice()*orders.get(product);
-            orders.remove(product);
+            it.remove(); // avoids a ConcurrentModificationException
         }
 
         // Making the cart available again
@@ -176,11 +179,13 @@ public class StoreManager {
      */
     public void emptyCart(int cartId){
         ShoppingCart cart = carts.get(cartId);
-        for (Product p: cart.getProducts().keySet()){
-            removeFromCart(p.getName(), cart.getProducts().get(p), cartId);
-        }
 
-        cart.getProducts().clear();
+        Iterator it =  cart.getProducts().keySet().iterator();
+        while (it.hasNext()) {
+            Product product = (Product)it.next();
+            inv.addStock(product,cart.getProducts().get(product));
+            it.remove(); // avoids a ConcurrentModificationException
+        }
     }
 
     /**

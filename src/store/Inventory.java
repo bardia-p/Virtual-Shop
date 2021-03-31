@@ -44,18 +44,18 @@ public class Inventory{
     private void initializeInventory(){
         // making some default products
         Product p1 = new Product("apple pie", 001,2.99,
-                "https://cdn.discordapp.com/attachments/760006680619515907/826481087530270800/apple_pie.jpg");
+                "https://user-images.githubusercontent.com/59774562/113081182-3386c100-91a6-11eb-83bb-afb697599774.png");
         Product p2 = new Product("blueberry pie", 002,3.99,
-                "https://cdn.discordapp.com/attachments/760006680619515907/826481089794146304/blueberry_pie.jpg");
+                "https://user-images.githubusercontent.com/59774562/113081177-32559400-91a6-11eb-969f-bcf32783c981.png");
         Product p3 = new Product("cake", 003,4.99,
-                "https://cdn.discordapp.com/attachments/760006680619515907/826481091023077376/cake.jpg");
+                "https://user-images.githubusercontent.com/59774562/113081178-32ee2a80-91a6-11eb-8155-3fa90ae0dad4.png");
 
         Product p4 = new Product("cooking book", 101,15.99,
-                "https://cdn.discordapp.com/attachments/760006680619515907/826481092508123166/cooking_book.jpg");
+                "https://user-images.githubusercontent.com/59774562/113081180-32ee2a80-91a6-11eb-8753-57d779308186.jpg");
         Product p5 = new Product("baking recipes", 102,8.99,
-                "https://cdn.discordapp.com/attachments/760006680619515907/826481088913473576/baking_recipes.jpg");
+                "https://user-images.githubusercontent.com/59774562/113057077-9eba9e00-917a-11eb-9cc5-011d9eaacd40.jpg");
         Product p6 = new Product("cooking tutorials", 103,19.99,
-                "https://cdn.discordapp.com/attachments/760006680619515907/826481094337495091/cooking_tutorials.jpg");
+                "https://user-images.githubusercontent.com/59774562/113057082-9eba9e00-917a-11eb-8e53-7c212917fd27.jpg");
 
         this.addStock(p1,20);
         this.addStock(p2,10);
