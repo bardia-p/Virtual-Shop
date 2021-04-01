@@ -426,9 +426,9 @@ public class StoreView {
 
                 productPanel.add(productLabel,BorderLayout.CENTER);
 
-                productPanel.add(getAddToCartButton(p), BorderLayout.SOUTH);
-
                 productPanel.add(getRemoveFromCartButton(p), BorderLayout.SOUTH);
+
+                productPanel.add(getAddToCartButton(p), BorderLayout.SOUTH);
 
                 //adding the border
                 TitledBorder title = BorderFactory.createTitledBorder(name);
