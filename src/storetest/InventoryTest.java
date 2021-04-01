@@ -6,8 +6,8 @@ package storetest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import store.Inventory;
-import store.Product;
+import myStore.Inventory;
+import myStore.Product;
 
 import java.util.HashMap;
 

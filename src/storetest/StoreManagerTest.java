@@ -4,7 +4,7 @@
 package storetest;
 
 
-import store.*;
+import myStore.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

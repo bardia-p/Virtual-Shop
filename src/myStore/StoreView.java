@@ -1,7 +1,7 @@
 //Bardia Parmoun 101143006
 //Guy Morgenshtern 101151430
 
-package store;
+package myStore;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -63,7 +63,6 @@ public class StoreView {
         this.frame = new JFrame();
         this.productPanels = new ArrayList<>();
         this.productInfoLabels = new HashMap<>();
-
     }
 
     /**
@@ -184,14 +183,7 @@ public class StoreView {
             // this method will be called when we click the button
             @Override
             public void actionPerformed(ActionEvent ae) {
-                    if (JOptionPane.showConfirmDialog(frame, "Are you sure you want to checkout?")
-                                == JOptionPane.OK_OPTION) {
-                            // close it down!
-                            displayCart();
-                            storeManager.checkout(cartId);
-                            frame.setVisible(false);
-                            frame.dispose();
-                    }
+                    displayOrder();
                 };
         });
         return button;
@@ -252,14 +244,16 @@ public class StoreView {
         frame.setTitle("Guy and Bardia's Pie and Media!");
         frame.setResizable(false);
 
+        int numProducts = storeManager.getAvailableProducts().size();
+
         JPanel mainPanel =  new JPanel(new GridBagLayout());
         JPanel headerPanel = new JPanel();
         JPanel leftSpacePanel = new JPanel();
         JPanel middleSpacePanel = new JPanel();
         JPanel rightSpacePanel = new JPanel();
 
-        JPanel productPanel = new JPanel(new GridLayout(3,2));
-        JPanel menuPanel = new JPanel(new GridLayout(3,1));
+        JPanel productPanel = new JPanel(new GridLayout(numProducts/2,2));
+        JPanel menuPanel = new JPanel(new GridLayout(6,1));
         JPanel footerPanel = new JPanel();
 
         // create your JLabels here
@@ -270,7 +264,7 @@ public class StoreView {
         // set the preferred sizes and colours
         headerPanel.setPreferredSize(new Dimension(500, 50));
         productPanel.setPreferredSize(new Dimension(500, 700));
-        menuPanel.setPreferredSize(new Dimension(150, 100));
+        menuPanel.setPreferredSize(new Dimension(150, 175));
         leftSpacePanel.setPreferredSize(new Dimension(50, 100));
         middleSpacePanel.setPreferredSize(new Dimension(50, 100));
         rightSpacePanel.setPreferredSize(new Dimension(50, 100));
@@ -293,15 +287,18 @@ public class StoreView {
                     "https://user-images.githubusercontent.com/59774562/113081179-32ee2a80-91a6-11eb-8dfb-0d6d2b17ec4a.png"));
             Image dimg = img.getScaledInstance(50,50, Image.SCALE_SMOOTH);
             ImageIcon icon = new ImageIcon(dimg);
-            menuPanel.add(getViewCartButton(icon), BorderLayout.NORTH);
-            menuPanel.add(getCheckoutButton(), BorderLayout.CENTER);
-            menuPanel.add(getQuitButton(), BorderLayout.SOUTH);
+            menuPanel.add(getViewCartButton(icon));
+            JLabel emptyLabelOne = new JLabel();
+            menuPanel.add(emptyLabelOne);
+            menuPanel.add(getCheckoutButton());
+            JLabel emptyLabelTwo = new JLabel();
+            menuPanel.add(emptyLabelTwo);
+            menuPanel.add(getQuitButton());
         }
 
         catch (IOException e){
             JOptionPane.showMessageDialog(frame, "Could not load the image", "Error", JOptionPane.ERROR_MESSAGE);
         }
-
 
         // adding all the panels to the main panel
         GridBagConstraints gbagConstraintsHeader = new GridBagConstraints();
@@ -339,6 +336,7 @@ public class StoreView {
         gbagConstraintsFooter.gridy = 2;
         mainPanel.add(footerPanel, gbagConstraintsFooter);
 
+
         // add the window listener
         // we no longer want the frame to close immediately when we press "x"
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -368,7 +366,7 @@ public class StoreView {
      * Displays the removefromcart interface where the user is prompted to choose a product and a proper amount which
      * is then removed from the cart
      */
-    private boolean removeFromCartUI(String product, int amount){
+    public boolean removeFromCartUI(String product, int amount){
         return storeManager.removeFromCart(product, amount, cartId);
     }
 
@@ -412,7 +410,6 @@ public class StoreView {
                 //adding the image to the label
                 ImageIcon icon = new ImageIcon(dimg);
                 productLabel.setIcon(icon);
-
 
                 //adding the label to the panel
                 JPanel productPanel = new JPanel();
@@ -479,5 +476,52 @@ public class StoreView {
         cartText+="Cart total: " + Math.round(storeManager.getCartTotalPrice(cartId) * 100.0)/100.0;
 
         JOptionPane.showMessageDialog(frame, cartText, "Your cart!", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    /**
+     * Displays a summary of the order
+     */
+    public void displayOrder() {
+        String name;
+        String stock;
+        String price;
+        String printMsg;
+
+        boolean isCartEmpty = true;
+
+        String cartText = "Are you sure you want to checkout?\n\n Order summary: \n\n";
+
+        cartText +=  "Stock             Product                Price\n";
+        cartText += "__________________________________________________\n";
+
+        for (Product p : storeManager.getCartProducts(cartId).keySet()) {
+            if (storeManager.getCartProducts(cartId).get(p)>0){
+                isCartEmpty = false;
+                name = p.getName();
+                stock = String.valueOf(storeManager.getCartProducts(cartId).get(p));
+                price = String.valueOf(p.getPrice());
+
+                printMsg = String.format("%s" + "%" + (15 - stock.length() + name.length()) + "s" + "%" +
+                        (25 - name.length() + price.length()) + "s", stock, name, price);
+
+                cartText += printMsg+"\n";
+            }
+        }
+
+        if (isCartEmpty){
+            cartText += "You didn't order anything :(\n";
+        }
+
+
+        cartText += "__________________________________________________\n";
+        cartText+="Total: " + Math.round(storeManager.getCartTotalPrice(cartId) * 100.0)/100.0;
+
+        if (JOptionPane.showConfirmDialog(frame, cartText)
+                == JOptionPane.OK_OPTION) {
+            // close it down!
+            storeManager.checkout(cartId);
+            frame.setVisible(false);
+            frame.dispose();
+        }
     }
 }
