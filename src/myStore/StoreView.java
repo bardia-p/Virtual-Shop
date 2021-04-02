@@ -3,6 +3,7 @@
 
 package myStore;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +31,7 @@ public class StoreView {
     /**
      * Keeps track of the main frame for the store
      */
-    private final JFrame frame;
+    private final JFrame FRAME;
 
     /**
      * Keeps track of the main store using StoreManager
@@ -52,6 +53,7 @@ public class StoreView {
      */
     private HashMap<Product, JLabel> productInfoLabels;
 
+
     /**
      * The default constructor for storeview which creates an instance of a user
      * @param storeManager the manager of the store
@@ -60,7 +62,7 @@ public class StoreView {
     public StoreView(StoreManager storeManager, int cartId) {
         this.storeManager = storeManager;
         this.cartId = cartId;
-        this.frame = new JFrame();
+        this.FRAME = new JFrame();
         this.productPanels = new ArrayList<>();
         this.productInfoLabels = new HashMap<>();
     }
@@ -80,7 +82,7 @@ public class StoreView {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 if (!addToCartUI(product.getName(), 1)){
-                    JOptionPane.showMessageDialog(frame, "Illegal amount!", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(FRAME, "Illegal amount!", "Error", JOptionPane.ERROR_MESSAGE);
                 }
                 else{
                     productInfoLabels.get(product).setText("Price: $" + product.getPrice() + " Stock:" +
@@ -106,7 +108,7 @@ public class StoreView {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 if (!removeFromCartUI(product.getName(), 1)){
-                    JOptionPane.showMessageDialog(frame, "Illegal amount!");
+                    JOptionPane.showMessageDialog(FRAME, "Illegal amount!");
                 }
                 else{
                     productInfoLabels.get(product).setText("Price: $" + product.getPrice() + " Stock:" +
@@ -153,7 +155,7 @@ public class StoreView {
             // this method will be called when we click the button
             @Override
             public void actionPerformed(ActionEvent ae) {
-                if (JOptionPane.showConfirmDialog(frame, "Are you sure you want to empty your cart?")
+                if (JOptionPane.showConfirmDialog(FRAME, "Are you sure you want to empty your cart?")
                         == JOptionPane.OK_OPTION) {
                     // close it down!
                     storeManager.emptyCart(cartId);
@@ -203,12 +205,12 @@ public class StoreView {
             // this method will be called when we click the button
             @Override
             public void actionPerformed(ActionEvent ae) {
-                if (JOptionPane.showConfirmDialog(frame, "Are you sure you want to quit?")
+                if (JOptionPane.showConfirmDialog(FRAME, "Are you sure you want to quit?")
                         == JOptionPane.OK_OPTION) {
                     // close it down!
                     storeManager.emptyCart(cartId);
-                    frame.setVisible(false);
-                    frame.dispose();
+                    FRAME.setVisible(false);
+                    FRAME.dispose();
                 }
 
             }
@@ -241,8 +243,8 @@ public class StoreView {
      * @return true if the UI finished successfully
      */
     public boolean displayGUI(){
-        frame.setTitle("Guy and Bardia's Pie and Media!");
-        frame.setResizable(false);
+        FRAME.setTitle("Guy and Bardia's Pie and Media!");
+        FRAME.setResizable(false);
 
         int numProducts = storeManager.getAvailableProducts().size();
 
@@ -283,8 +285,7 @@ public class StoreView {
         }
 
         try {
-            BufferedImage img = ImageIO.read(new URL(
-                    "https://user-images.githubusercontent.com/59774562/113081179-32ee2a80-91a6-11eb-8dfb-0d6d2b17ec4a.png"));
+            BufferedImage img = ImageIO.read(getClass().getResource("images/shoppingcart.png"));
             Image dimg = img.getScaledInstance(50,50, Image.SCALE_SMOOTH);
             ImageIcon icon = new ImageIcon(dimg);
             menuPanel.add(getViewCartButton(icon));
@@ -297,7 +298,7 @@ public class StoreView {
         }
 
         catch (IOException e){
-            JOptionPane.showMessageDialog(frame, "Could not load the image", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(FRAME, "Could not load the image", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
         // adding all the panels to the main panel
@@ -338,27 +339,27 @@ public class StoreView {
 
 
         // add the window listener
-        // we no longer want the frame to close immediately when we press "x"
-        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        frame.addWindowListener(new WindowAdapter() {
+        // we no longer want the FRAME to close immediately when we press "x"
+        FRAME.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        FRAME.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent we) {
-                if (JOptionPane.showConfirmDialog(frame, "Are you sure you want to quit?")
+                if (JOptionPane.showConfirmDialog(FRAME, "Are you sure you want to quit?")
                         == JOptionPane.OK_OPTION) {
                     // close it down!
-                    frame.setVisible(false);
-                    frame.dispose();
+                    FRAME.setVisible(false);
+                    FRAME.dispose();
                 }
             }
         });
 
-        // the frame is not visible until we set it to be so
-        frame.setVisible(true);
+        // the FRAME is not visible until we set it to be so
+        FRAME.setVisible(true);
 
 
         // pack
-        frame.add(mainPanel);
-        frame.pack();
+        FRAME.add(mainPanel);
+        FRAME.pack();
         return true;
     }
 
@@ -401,7 +402,7 @@ public class StoreView {
                 productLabel.setPreferredSize(new Dimension(width,height));
 
                 //loading the image
-                BufferedImage img = ImageIO.read(new URL(
+                BufferedImage img = ImageIO.read(getClass().getResource(
                         storeManager.getAvailableProducts().get(i).getImageURL()));
 
                 //resizing the image
@@ -434,7 +435,7 @@ public class StoreView {
                 productPanels.add(productPanel);
             }
             catch(IOException e){
-                JOptionPane.showMessageDialog(frame, "Could not load the image" , "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(FRAME, "Could not load the image" , "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -475,7 +476,7 @@ public class StoreView {
         cartText += "__________________________________________________\n";
         cartText+="Cart total: " + Math.round(storeManager.getCartTotalPrice(cartId) * 100.0)/100.0;
 
-        JOptionPane.showMessageDialog(frame, cartText, "Your cart!", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(FRAME, cartText, "Your cart!", JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
@@ -516,12 +517,12 @@ public class StoreView {
         cartText += "__________________________________________________\n";
         cartText+="Total: " + Math.round(storeManager.getCartTotalPrice(cartId) * 100.0)/100.0;
 
-        if (JOptionPane.showConfirmDialog(frame, cartText)
+        if (JOptionPane.showConfirmDialog(FRAME, cartText)
                 == JOptionPane.OK_OPTION) {
             // close it down!
             storeManager.checkout(cartId);
-            frame.setVisible(false);
-            frame.dispose();
+            FRAME.setVisible(false);
+            FRAME.dispose();
         }
     }
 }
