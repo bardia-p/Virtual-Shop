@@ -1,7 +1,7 @@
 //Bardia Parmoun 101143006
 //Guy Morgenshtern 101151430
 
-package myStore;
+package mystore;
 
 import java.awt.event.*;
 import java.io.IOException;
