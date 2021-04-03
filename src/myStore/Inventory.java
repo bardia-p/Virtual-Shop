@@ -51,7 +51,7 @@ public class Inventory{
                 "images/cake.png");
 
         Product p4 = new Product("cooking book", 101,15.99,
-                "images/apple_pie.png");
+                "images/cooking_book.jpg");
         Product p5 = new Product("baking recipes", 102,8.99,
                 "images/baking_recipes.jpg");
         Product p6 = new Product("cooking tutorials", 103,19.99,

@@ -53,6 +53,8 @@ public class StoreView {
      */
     private HashMap<Product, JLabel> productInfoLabels;
 
+    private JLabel cartTotalLabel;
+
 
     /**
      * The default constructor for storeview which creates an instance of a user
@@ -65,6 +67,7 @@ public class StoreView {
         this.FRAME = new JFrame();
         this.productPanels = new ArrayList<>();
         this.productInfoLabels = new HashMap<>();
+        this.cartTotalLabel = new JLabel();
     }
 
     /**
@@ -87,6 +90,8 @@ public class StoreView {
                 else{
                     productInfoLabels.get(product).setText("Price: $" + product.getPrice() + " Stock:" +
                             storeManager.checkStock(product));
+                    cartTotalLabel.setText("Cart total: $" +
+                            Math.round(storeManager.getCartTotalPrice(cartId) * 100.0)/100.0);
                 }
             }
         });
@@ -108,11 +113,13 @@ public class StoreView {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 if (!removeFromCartUI(product.getName(), 1)){
-                    JOptionPane.showMessageDialog(FRAME, "Illegal amount!");
+                    JOptionPane.showMessageDialog(FRAME, "Illegal amount!", "Error", JOptionPane.ERROR_MESSAGE);
                 }
                 else{
                     productInfoLabels.get(product).setText("Price: $" + product.getPrice() + " Stock:" +
                             storeManager.checkStock(product));
+                    cartTotalLabel.setText("Cart total: $" +
+                            Math.round(storeManager.getCartTotalPrice(cartId) * 100.0)/100.0);
                 }
             }
         });
@@ -163,6 +170,8 @@ public class StoreView {
                         productInfoLabels.get(p).setText("Price: $" + p.getPrice() + " Stock:" +
                                 storeManager.checkStock(p));
                     }
+                    cartTotalLabel.setText("Cart total: $" +
+                            Math.round(storeManager.getCartTotalPrice(cartId) * 100.0)/100.0);
                 }
 
             }
@@ -177,7 +186,7 @@ public class StoreView {
      */
     private JButton getCheckoutButton() {
         JButton button = new JButton("checkout");
-        button.setSize(50,30);
+        button.setSize(50,50);
 
         // add the action listener
         button.addActionListener(new ActionListener() {
@@ -244,21 +253,19 @@ public class StoreView {
      */
     public boolean displayGUI(){
         FRAME.setTitle("Guy and Bardia's Pie and Media!");
-        FRAME.setResizable(false);
+        FRAME.setMinimumSize(new Dimension(800,700));
 
         int numProducts = storeManager.getAvailableProducts().size();
 
-        JPanel mainPanel =  new JPanel(new GridBagLayout());
+        // Creating the JPanels
         JPanel headerPanel = new JPanel();
-        JPanel leftSpacePanel = new JPanel();
-        JPanel middleSpacePanel = new JPanel();
-        JPanel rightSpacePanel = new JPanel();
-
         JPanel productPanel = new JPanel(new GridLayout(numProducts/2,2));
-        JPanel menuPanel = new JPanel(new GridLayout(6,1));
+        JPanel buttonPanel = new JPanel(new GridBagLayout());
+        JPanel menuPanel = new JPanel();
+        JPanel productPanelWithSpace = new JPanel();
         JPanel footerPanel = new JPanel();
 
-        // create your JLabels here
+        // Creating the JLabels
         Font fontTitle = new Font("Comic Sans Ms", Font.BOLD + Font.ITALIC, 14);
         JLabel headerLabel = new JLabel("Welcome to Guy and Bardia's Pie and Media! (ID: " + cartId + ")");
         headerLabel.setFont(fontTitle);
@@ -266,80 +273,88 @@ public class StoreView {
         // set the preferred sizes and colours
         headerPanel.setPreferredSize(new Dimension(500, 50));
         productPanel.setPreferredSize(new Dimension(500, 700));
-        menuPanel.setPreferredSize(new Dimension(150, 175));
-        leftSpacePanel.setPreferredSize(new Dimension(50, 100));
-        middleSpacePanel.setPreferredSize(new Dimension(50, 100));
-        rightSpacePanel.setPreferredSize(new Dimension(50, 100));
+        productPanelWithSpace.setPreferredSize(new Dimension(550, 700));
+        menuPanel.setPreferredSize(new Dimension(300, 700));
+        buttonPanel.setPreferredSize(new Dimension(250, 150));
         footerPanel.setPreferredSize(new Dimension(500, 50));
 
-
-        // adding JLabel to the header panel and footer panel
+        // adding JLabel to the header panel
         headerPanel.add(headerLabel,BorderLayout.CENTER);
+
+        // adding the empty cart button to the footer panel
         footerPanel.add(getEmptyCartButton());
 
+        // creating the labels for all the products
         displayItems();
 
-
+        // adding all the products to the productPanel
         for (JPanel p: productPanels){
             productPanel.add(p);
         }
 
+        // adding spacing to the product panel
+        productPanelWithSpace.add(productPanel);
+
+        // creating the menu panel
         try {
+            // adding the buttons
+            // adding the cart total label
+            cartTotalLabel = new JLabel("Cart total: $" +
+                    Math.round(storeManager.getCartTotalPrice(cartId) * 100.0)/100.0);
+
+            GridBagConstraints gbagConstraintsTotal = new GridBagConstraints();
+            gbagConstraintsTotal.gridx = 1;
+            gbagConstraintsTotal.gridy = 0;
+            gbagConstraintsTotal.insets = new Insets(5,5,5,5);
+            buttonPanel.add(cartTotalLabel, gbagConstraintsTotal);
+
+            // adding the view cart button
             BufferedImage img = ImageIO.read(getClass().getResource("images/shoppingcart.png"));
-            Image dimg = img.getScaledInstance(50,50, Image.SCALE_SMOOTH);
+            Image dimg = img.getScaledInstance(30,30, Image.SCALE_SMOOTH);
             ImageIcon icon = new ImageIcon(dimg);
-            menuPanel.add(getViewCartButton(icon));
-            JLabel emptyLabelOne = new JLabel();
-            menuPanel.add(emptyLabelOne);
-            menuPanel.add(getCheckoutButton());
-            JLabel emptyLabelTwo = new JLabel();
-            menuPanel.add(emptyLabelTwo);
-            menuPanel.add(getQuitButton());
+            GridBagConstraints gbagConstraintsCart = new GridBagConstraints();
+            gbagConstraintsCart.gridx = 1;
+            gbagConstraintsCart.gridy = 1;
+            gbagConstraintsCart.insets = new Insets(5,5,5,5);
+            buttonPanel.add(getViewCartButton(icon), gbagConstraintsCart);
+
+            // adding the checkout button
+            GridBagConstraints gbagConstraintsCheckout = new GridBagConstraints();
+            gbagConstraintsCheckout.gridx = 1;
+            gbagConstraintsCheckout.gridy = 2;
+            gbagConstraintsCheckout.insets = new Insets(5,5,5,5);
+            buttonPanel.add(getCheckoutButton(), gbagConstraintsCheckout);
+
+            // adding the quit button
+            GridBagConstraints gbagConstraintsQuit = new GridBagConstraints();
+            gbagConstraintsQuit.gridx = 1;
+            gbagConstraintsQuit.gridy = 3;
+            gbagConstraintsQuit.insets = new Insets(5,5,5,5);
+            buttonPanel.add(getQuitButton(), gbagConstraintsQuit);
+
+            // creating the menu panel with proper spacing
+            menuPanel.add(buttonPanel, BorderLayout.CENTER);
+
+            // adding a border to the menu panel
+            TitledBorder title = BorderFactory.createTitledBorder("");
+            buttonPanel.setBorder(title);
         }
 
         catch (IOException e){
             JOptionPane.showMessageDialog(FRAME, "Could not load the image", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-        // adding all the panels to the main panel
-        GridBagConstraints gbagConstraintsHeader = new GridBagConstraints();
-        gbagConstraintsHeader.gridx = 1;
-        gbagConstraintsHeader.gridy = 0;
-        mainPanel.add(headerPanel, gbagConstraintsHeader);
+        // adding scroll bars to main
+        JScrollPane productPanelWithScroll = new JScrollPane(productPanelWithSpace,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-        GridBagConstraints gbagConstraintsLeftSpace = new GridBagConstraints();
-        gbagConstraintsLeftSpace.gridx = 0;
-        gbagConstraintsLeftSpace.gridy = 1;
-        mainPanel.add(leftSpacePanel, gbagConstraintsLeftSpace);
-
-        GridBagConstraints gbagConstraintsProduct = new GridBagConstraints();
-        gbagConstraintsProduct.gridx = 1;
-        gbagConstraintsProduct.gridy = 1;
-        mainPanel.add(productPanel, gbagConstraintsProduct);
-
-        GridBagConstraints gbagConstraintsMiddleSpace = new GridBagConstraints();
-        gbagConstraintsMiddleSpace.gridx = 2;
-        gbagConstraintsMiddleSpace.gridy = 1;
-        mainPanel.add(middleSpacePanel, gbagConstraintsMiddleSpace);
-
-        GridBagConstraints gbagConstraintsMenu = new GridBagConstraints();
-        gbagConstraintsMenu.gridx = 3;
-        gbagConstraintsMenu.gridy = 1;
-        mainPanel.add(menuPanel, gbagConstraintsMenu);
-
-        GridBagConstraints gbagConstraintsRightSpace = new GridBagConstraints();
-        gbagConstraintsRightSpace.gridx = 4;
-        gbagConstraintsRightSpace.gridy = 1;
-        mainPanel.add(rightSpacePanel, gbagConstraintsRightSpace);
-
-        GridBagConstraints gbagConstraintsFooter = new GridBagConstraints();
-        gbagConstraintsFooter.gridx = 1;
-        gbagConstraintsFooter.gridy = 2;
-        mainPanel.add(footerPanel, gbagConstraintsFooter);
-
+        // adding all the components to the frame
+        FRAME.add(headerPanel,BorderLayout.NORTH);
+        FRAME.getContentPane().add(productPanelWithScroll,BorderLayout.CENTER);
+        FRAME.add(menuPanel,BorderLayout.EAST);
+        FRAME.add(footerPanel,BorderLayout.SOUTH);
 
         // add the window listener
-        // we no longer want the FRAME to close immediately when we press "x"
         FRAME.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         FRAME.addWindowListener(new WindowAdapter() {
             @Override
@@ -353,13 +368,12 @@ public class StoreView {
             }
         });
 
-        // the FRAME is not visible until we set it to be so
+        // making the frame visible
         FRAME.setVisible(true);
 
-
         // pack
-        FRAME.add(mainPanel);
         FRAME.pack();
+
         return true;
     }
 
@@ -387,7 +401,7 @@ public class StoreView {
         String stock;
         String price;
 
-        int width = 200;
+        int width = 150;
         int height = 150;
 
         for (int i = 0; i < storeManager.getAvailableProducts().size(); i++) {
@@ -403,7 +417,7 @@ public class StoreView {
 
                 //loading the image
                 BufferedImage img = ImageIO.read(getClass().getResource(
-                        storeManager.getAvailableProducts().get(i).getImageURL()));
+                        storeManager.getAvailableProducts().get(i).getImagePath()));
 
                 //resizing the image
                 Image dimg = img.getScaledInstance(width,height, Image.SCALE_SMOOTH);
@@ -413,23 +427,39 @@ public class StoreView {
                 productLabel.setIcon(icon);
 
                 //adding the label to the panel
-                JPanel productPanel = new JPanel();
-                productPanel.setPreferredSize(new Dimension(width, height+100));
+                JPanel productPanel = new JPanel(new GridBagLayout());
+                productPanel.setPreferredSize(new Dimension(width,height+100));
+
+                JPanel buttonPanel = new JPanel();
 
                 JLabel productInfo = new JLabel("Price: $" + price + " Stock:" + stock);
 
+                // adding the label to the product labels hashmap
                 productInfoLabels.put(p,productInfo);
 
-                productPanel.add(productInfo,BorderLayout.NORTH);
+                // adding the productinfo label
+                GridBagConstraints gbagConstraintsInfo = new GridBagConstraints();
+                gbagConstraintsInfo.gridx = 0;
+                gbagConstraintsInfo.gridy = 0;
+                productPanel.add(productInfo, gbagConstraintsInfo);
 
-                productPanel.add(productLabel,BorderLayout.CENTER);
+                // adding the image for the product
+                GridBagConstraints gbagConstraintsRightImage = new GridBagConstraints();
+                gbagConstraintsRightImage.gridx = 0;
+                gbagConstraintsRightImage.gridy = 1;
+                productPanel.add(productLabel, gbagConstraintsRightImage);
 
-                productPanel.add(getRemoveFromCartButton(p), BorderLayout.SOUTH);
+                // adding the addtocart and removefromcart buttons
+                buttonPanel.add(getRemoveFromCartButton(p));
+                buttonPanel.add(getAddToCartButton(p));
 
-                productPanel.add(getAddToCartButton(p), BorderLayout.SOUTH);
+                GridBagConstraints gbagConstraintsButtons= new GridBagConstraints();
+                gbagConstraintsButtons.gridx = 0;
+                gbagConstraintsButtons.gridy = 2;
+                productPanel.add(buttonPanel, gbagConstraintsButtons);
 
                 //adding the border
-                TitledBorder title = BorderFactory.createTitledBorder(name);
+                TitledBorder title = BorderFactory.createTitledBorder(name + " (ID: " + p.getId() +")");
                 productPanel.setBorder(title);
 
                 productPanels.add(productPanel);
@@ -474,7 +504,7 @@ public class StoreView {
         }
 
         cartText += "__________________________________________________\n";
-        cartText+="Cart total: " + Math.round(storeManager.getCartTotalPrice(cartId) * 100.0)/100.0;
+        cartText+="Cart total: $" + Math.round(storeManager.getCartTotalPrice(cartId) * 100.0)/100.0;
 
         JOptionPane.showMessageDialog(FRAME, cartText, "Your cart!", JOptionPane.INFORMATION_MESSAGE);
     }
@@ -515,7 +545,7 @@ public class StoreView {
 
 
         cartText += "__________________________________________________\n";
-        cartText+="Total: " + Math.round(storeManager.getCartTotalPrice(cartId) * 100.0)/100.0;
+        cartText+="Total: $" + Math.round(storeManager.getCartTotalPrice(cartId) * 100.0)/100.0;
 
         if (JOptionPane.showConfirmDialog(FRAME, cartText)
                 == JOptionPane.OK_OPTION) {
