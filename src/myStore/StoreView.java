@@ -259,10 +259,10 @@ public class StoreView {
 
         // Creating the JPanels
         JPanel headerPanel = new JPanel();
-        JPanel productPanel = new JPanel(new GridLayout(numProducts/2,2));
+        JPanel itemsPanel = new JPanel(new GridLayout(numProducts/2,2));
         JPanel buttonPanel = new JPanel(new GridBagLayout());
         JPanel menuPanel = new JPanel();
-        JPanel productPanelWithSpace = new JPanel();
+        JPanel itemsPanelWithSpace = new JPanel();
         JPanel footerPanel = new JPanel();
 
         // Creating the JLabels
@@ -272,8 +272,8 @@ public class StoreView {
 
         // set the preferred sizes and colours
         headerPanel.setPreferredSize(new Dimension(500, 50));
-        productPanel.setPreferredSize(new Dimension(500, 700));
-        productPanelWithSpace.setPreferredSize(new Dimension(550, 700));
+        itemsPanel.setPreferredSize(new Dimension(500, 700));
+        itemsPanelWithSpace.setPreferredSize(new Dimension(550, 700));
         menuPanel.setPreferredSize(new Dimension(300, 700));
         buttonPanel.setPreferredSize(new Dimension(250, 150));
         footerPanel.setPreferredSize(new Dimension(500, 50));
@@ -289,11 +289,11 @@ public class StoreView {
 
         // adding all the products to the productPanel
         for (JPanel p: productPanels){
-            productPanel.add(p);
+            itemsPanel.add(p);
         }
 
         // adding spacing to the product panel
-        productPanelWithSpace.add(productPanel);
+        itemsPanelWithSpace.add(itemsPanel);
 
         // creating the menu panel
         try {
@@ -345,7 +345,7 @@ public class StoreView {
         }
 
         // adding scroll bars to main
-        JScrollPane productPanelWithScroll = new JScrollPane(productPanelWithSpace,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+        JScrollPane productPanelWithScroll = new JScrollPane(itemsPanelWithSpace,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         // adding all the components to the frame
