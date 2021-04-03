@@ -3,19 +3,14 @@
 
 package myStore;
 
-import java.io.File;
+import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.*;
 import java.awt.*;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
-import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.border.TitledBorder;
@@ -53,6 +48,9 @@ public class StoreView {
      */
     private HashMap<Product, JLabel> productInfoLabels;
 
+    /**
+     * The label that keeps track of the cart total
+     */
     private JLabel cartTotalLabel;
 
 
@@ -242,9 +240,9 @@ public class StoreView {
 
         for (int i=0; i<activeSV; i++){
             customers[i] = new StoreView(sm, sm.assignNewCartID());
+            customers[i].displayGUI();
         }
 
-        customers[0].displayGUI();
     }
 
     /**
@@ -259,7 +257,7 @@ public class StoreView {
 
         // Creating the JPanels
         JPanel headerPanel = new JPanel();
-        JPanel itemsPanel = new JPanel(new GridLayout(numProducts/2,2));
+        JPanel itemsPanel = new JPanel(new GridLayout(3,numProducts/3));
         JPanel buttonPanel = new JPanel(new GridBagLayout());
         JPanel menuPanel = new JPanel();
         JPanel itemsPanelWithSpace = new JPanel();
@@ -369,6 +367,7 @@ public class StoreView {
         });
 
         // making the frame visible
+        FRAME.setBackground(Color.red);
         FRAME.setVisible(true);
 
         // pack
@@ -381,7 +380,7 @@ public class StoreView {
      * Displays the removefromcart interface where the user is prompted to choose a product and a proper amount which
      * is then removed from the cart
      */
-    public boolean removeFromCartUI(String product, int amount){
+    private boolean removeFromCartUI(String product, int amount){
         return storeManager.removeFromCart(product, amount, cartId);
     }
 
@@ -389,14 +388,14 @@ public class StoreView {
      * Displays the addToCart interface where the user is prompted to choose a product and a proper amount which is then
      * added to the cart
      */
-    public boolean addToCartUI(String product, int amount){
+    private boolean addToCartUI(String product, int amount){
         return storeManager.addToCart(product, amount, cartId);
     }
 
     /**
      * Displays all the available items in the store
      */
-    public void displayItems() {
+    private void displayItems() {
         String name;
         String stock;
         String price;
@@ -473,7 +472,7 @@ public class StoreView {
     /**
      * Displays all the available items in the cart
      */
-    public void displayCart() {
+    private void displayCart() {
         String name;
         String stock;
         String price;
@@ -512,7 +511,7 @@ public class StoreView {
     /**
      * Displays a summary of the order
      */
-    public void displayOrder() {
+    private void displayOrder() {
         String name;
         String stock;
         String price;
