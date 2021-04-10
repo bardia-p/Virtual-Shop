@@ -481,7 +481,10 @@ public class StoreView {
         boolean isCartEmpty = true;
 
         String cartText;
-        cartText =  "Stock             Product                Price\n";
+        cartText = "Total number of different products in the cart: " + storeManager.getNumOfProductsInCart(cartId);
+        cartText += "\nTotal number of items in the cart: " + storeManager.getNumOfItemsInCart(cartId);
+
+        cartText +=  "\n\nStock             Product                Price\n";
         cartText += "__________________________________________________\n";
 
         for (Product p : storeManager.getCartProducts(cartId).keySet()) {
@@ -521,7 +524,10 @@ public class StoreView {
 
         String cartText = "Are you sure you want to checkout?\n\n Order summary: \n\n";
 
-        cartText +=  "Stock             Product                Price\n";
+        cartText += "Total number of different products in the cart: " + storeManager.getNumOfProductsInCart(cartId);
+        cartText += "\nTotal number of items in the cart: " + storeManager.getNumOfItemsInCart(cartId);
+
+        cartText +=  "\n\nStock             Product                Price\n";
         cartText += "__________________________________________________\n";
 
         for (Product p : storeManager.getCartProducts(cartId).keySet()) {

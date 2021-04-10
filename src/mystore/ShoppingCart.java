@@ -8,10 +8,10 @@ import java.util.HashMap;
 /**
  * The class to keep track of shopping cart (it is a subclass of the inventory class)
  * @author Bardia Parmoun 101143006
- * @version 1.0
- * @date 2020/02/27
+ * @version 2.0
+ * @date 2020/04/10
  */
-public class ShoppingCart extends Inventory {
+public class ShoppingCart extends ProductStockContainer {
     /**
      * Keeps track of the id of the cart
      */
@@ -22,7 +22,7 @@ public class ShoppingCart extends Inventory {
      * @param cartId the id that is assigned ot the cart
      */
     public ShoppingCart (int cartId) {
-        super(new HashMap<>());
+        this.products = new HashMap<>();
         this.cartId = cartId;
     }
 
@@ -54,5 +54,4 @@ public class ShoppingCart extends Inventory {
         }
         return total;
     }
-
 }

@@ -31,7 +31,6 @@ public class StoreManager {
      */
     private HashMap<Integer, ShoppingCart> carts ;
 
-
     /**
      * The constructor for the StoreManager class in case there are not inputs
      */
@@ -56,7 +55,7 @@ public class StoreManager {
      */
     public int checkStock (Product product){
         if (product!=null){
-            return inv.getStock(product.getId());
+            return inv.getProductQuantity(product);
         }
         return 0;
     }
@@ -142,9 +141,9 @@ public class StoreManager {
     public boolean addToCart(String product, int amount, int cartId) {
         Product p = findProduct(product, cartId);
         ShoppingCart cart = carts.get(cartId);
-        if (p!=null && amount <= inv.getStock(p.getId()) && amount > 0) {
-            if (inv.removeStock(p, amount)) {
-                cart.addStock(p, amount);
+        if (p!=null && amount <= inv.getProductQuantity(p) && amount > 0) {
+            if (inv.removeProductQuantity(p, amount)) {
+                cart.addProductQuantity(p, amount);
                 return true;
             }
         }
@@ -161,9 +160,9 @@ public class StoreManager {
     public boolean removeFromCart(String product, int amount, int cartId) {
         Product p = findProduct(product, cartId);
         ShoppingCart cart = carts.get(cartId);
-        if (p!=null && amount <= cart.getStock(p.getId()) && amount > 0) {
-            if (carts.get(cartId).removeStock(p, amount)) {
-                inv.addStock(p, amount);
+        if (p!=null && amount <= cart.getProductQuantity(p) && amount > 0) {
+            if (carts.get(cartId).removeProductQuantity(p, amount)) {
+                inv.addProductQuantity(p, amount);
                 if (getCartProducts(cartId).get(p)==0){
                     getCartProducts(cartId).remove(p);
                 }
@@ -183,9 +182,31 @@ public class StoreManager {
         Iterator it =  cart.getProducts().keySet().iterator();
         while (it.hasNext()) {
             Product product = (Product)it.next();
-            inv.addStock(product,cart.getProducts().get(product));
+            inv.addProductQuantity(product,cart.getProducts().get(product));
             it.remove(); // avoids a ConcurrentModificationException
         }
+    }
+
+    /**
+     * Gets the number of items in the cart for a given cart id
+     * @param cartId the cart id
+     * @return the number of products
+     */
+    public int getNumOfItemsInCart(int cartId){
+        int numItems = 0;
+        for (Product p: carts.get(cartId).getProducts().keySet()){
+            numItems += carts.get(cartId).getProductQuantity(p);
+        }
+        return numItems;
+    }
+
+    /**
+     * Gets the number of the products in the cart for a given cart id
+     * @param cartId the cart id
+     * @return the number of products
+     */
+    public int getNumOfProductsInCart(int cartId){
+        return carts.get(cartId).getNumOfProducts();
     }
 
     /**
