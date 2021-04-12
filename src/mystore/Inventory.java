@@ -13,7 +13,6 @@ import java.util.HashMap;
  */
 
 public class Inventory extends ProductStockContainer{
-
     /**
      * Constructor
      * initializes parallel arraylists
