@@ -51,6 +51,21 @@ An example of the message displayed by view cart
 <img src="images/empty_cart.JPG" />
 </p>
 
+- Once you are done shopping you can click the checkout button which displays a receipt of your purchase for you to confirm:
+<p align="center">
+<img src="images/checkout.JPG" />
+</p>
+
+- You can quit the store at any time by clicking the quit button which empties your cart and returns all of its contents to the inventory. Clicking the quit button results in the following message:
+<p align="center">
+<img src="images/quit.JPG" />
+</p>
+
+- Notice that once you start the program the number of stores is set to 3 by default which opens 3 stores at once. You can treat these windows as 3 separate clients and work on each one individually. Note that once you switch between the stores the content of their inventories will be updated according to your last actions. You can also resize the windows for easier use!
+<p align="center">
+<img src="images/multiple_store.JPG" />
+</p>
+
 ## CREDITS
 Author: Bardia Parmoun & Guy Morgenshtern
 
