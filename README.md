@@ -18,7 +18,7 @@ be found here: https://adoptopenjdk.net/releases.html
 
 Locate the mystore folder and inside of that run the following command: 
 ```shell
-$ javac sources.txt
+$ javac @sources.txt
 ```
 Then exit the folder and run either of the follwing commands to access the UIs:
 ```shell
