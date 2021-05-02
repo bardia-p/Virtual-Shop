@@ -50,6 +50,7 @@ An example of the message displayed by view cart
 <p align="center">
 <img src="images/empty_cart.JPG" />
 </p>
+
 ## CREDITS
 Author: Bardia Parmoun & Guy Morgenshtern
 
