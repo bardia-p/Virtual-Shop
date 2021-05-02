@@ -1,7 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="da75b291-4d54-4b4a-8f63-b615efbc7b92" name="Default Changelist" comment="" />
+    <list default="true" id="da75b291-4d54-4b4a-8f63-b615efbc7b92" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -85,27 +105,36 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1493" height="214" key="GridCell.Tab.0.bottom" timestamp="1619927954231">
+    <state x="549" y="159" key="FileChooserDialogImpl" timestamp="1619929992088">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1493" height="214" key="GridCell.Tab.0.bottom/0.0.1536.834@0.0.1536.834" timestamp="1619927954231" />
-    <state width="1493" height="214" key="GridCell.Tab.0.center" timestamp="1619927954231">
+    <state x="549" y="159" key="FileChooserDialogImpl/0.0.1536.834@0.0.1536.834" timestamp="1619929992088" />
+    <state width="1493" height="35" key="GridCell.Tab.0.bottom" timestamp="1619929857992">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1493" height="214" key="GridCell.Tab.0.center/0.0.1536.834@0.0.1536.834" timestamp="1619927954231" />
-    <state width="1493" height="214" key="GridCell.Tab.0.left" timestamp="1619927954231">
+    <state width="1493" height="35" key="GridCell.Tab.0.bottom/0.0.1536.834@0.0.1536.834" timestamp="1619929857992" />
+    <state width="1493" height="35" key="GridCell.Tab.0.center" timestamp="1619929857991">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1493" height="214" key="GridCell.Tab.0.left/0.0.1536.834@0.0.1536.834" timestamp="1619927954231" />
-    <state width="1493" height="214" key="GridCell.Tab.0.right" timestamp="1619927954231">
+    <state width="1493" height="35" key="GridCell.Tab.0.center/0.0.1536.834@0.0.1536.834" timestamp="1619929857991" />
+    <state width="1493" height="35" key="GridCell.Tab.0.left" timestamp="1619929857991">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1493" height="214" key="GridCell.Tab.0.right/0.0.1536.834@0.0.1536.834" timestamp="1619927954231" />
+    <state width="1493" height="35" key="GridCell.Tab.0.left/0.0.1536.834@0.0.1536.834" timestamp="1619929857991" />
+    <state width="1493" height="35" key="GridCell.Tab.0.right" timestamp="1619929857991">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1493" height="35" key="GridCell.Tab.0.right/0.0.1536.834@0.0.1536.834" timestamp="1619929857991" />
     <state x="498" y="309" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1619927928262">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state x="498" y="309" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD/0.0.1536.834@0.0.1536.834" timestamp="1619927928262" />
+    <state x="209" y="38" key="new project wizard" timestamp="1619930002942">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="209" y="38" key="new project wizard/0.0.1536.834@0.0.1536.834" timestamp="1619930002942" />
   </component>
 </project>
