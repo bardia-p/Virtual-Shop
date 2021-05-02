@@ -4,7 +4,7 @@
 package storetest;
 
 
-import store.*;
+import mystore.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -42,12 +42,12 @@ public class StoreManagerTest {
         sm = new StoreManager();
         carts = new ShoppingCart[4];
         products = new Product[6];
-        products[0] = new Product("apple pie", 001,2.99);
-        products[1] = new Product("blueberry pie", 002,3.99);
-        products[2] = new Product("cake", 003,4.99);
-        products[3] = new Product("cooking book", 101,15.99);
-        products[4] = new Product("baking recipes", 102,8.99);
-        products[5] = new Product("cooking tutorials", 103,19.99);
+        products[0] = new Product("apple pie", 001,2.99, "");
+        products[1] = new Product("blueberry pie", 002,3.99, "");
+        products[2] = new Product("cake", 003,4.99, "");
+        products[3] = new Product("cooking book", 101,15.99, "");
+        products[4] = new Product("baking recipes", 102,8.99, "");
+        products[5] = new Product("cooking tutorials", 103,19.99, "");
     }
 
     /**
@@ -147,7 +147,7 @@ public class StoreManagerTest {
     @Test
     @Order(6)
     public void testAddToCartProductNotThere() {
-        Product newProduct = new Product("cookie", 34, 2.99);
+        Product newProduct = new Product("cookie", 34, 2.99, "");
 
         // checks the output of the addToCart method
         assertEquals(false, sm.addToCart(newProduct.getName(),1,0),

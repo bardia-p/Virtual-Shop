@@ -234,7 +234,7 @@ public class StoreView {
         StoreManager sm = new StoreManager();
 
         // The number of allowed active users
-        int activeSV = 1;
+        int activeSV = 3;
 
         StoreView[] customers = new StoreView[activeSV];
 
@@ -242,7 +242,6 @@ public class StoreView {
             customers[i] = new StoreView(sm, sm.assignNewCartID());
             customers[i].displayGUI();
         }
-
     }
 
     /**
@@ -351,6 +350,17 @@ public class StoreView {
         FRAME.getContentPane().add(productPanelWithScroll,BorderLayout.CENTER);
         FRAME.add(menuPanel,BorderLayout.EAST);
         FRAME.add(footerPanel,BorderLayout.SOUTH);
+
+        // refreshes the contents of the frame when the frame is clicked on
+        FRAME.getContentPane().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                for (Product p: productInfoLabels.keySet()) {
+                    productInfoLabels.get(p).setText("Price: $" + p.getPrice() + " Stock:" +
+                            storeManager.checkStock(p));
+                }
+            }
+        });
 
         // add the window listener
         FRAME.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
