@@ -24,9 +24,14 @@ Then exit the folder and run either of the follwing commands to access the UIs:
 ```shell
 $ java mystore/StoreView
 ```
-or 
+or
 ```shell
 $ java mystore/StoreViewBatchUI
+```
+
+If you want to run the already compiled version of the code you can run the jar file by simply clicking on it or run it using:
+```shell
+$ java -jar VirtualStore.jar
 ```
 ## USING THE PROGRAM
 - After running StoreView you will prompted by the following window:
